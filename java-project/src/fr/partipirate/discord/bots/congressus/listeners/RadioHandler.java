@@ -62,6 +62,9 @@ public class RadioHandler extends ListenerAdapter {
 		
 		Thread showNameThread = new Thread() {
 			@Override
+			
+			private String lastNickname = "";
+			
 			public void run() {
 				int position = 0;
 				
@@ -114,7 +117,10 @@ public class RadioHandler extends ListenerAdapter {
 //							System.out.println("Start change : " + new Date());
 //							System.out.println("Change nickname to : " + nickName);
 
-							congressusBot.setBotNickname(nickname);
+							if (!nickname.equals(this.lastNickname) {
+								congressusBot.setBotNickname(nickname);
+								this.lastNickname = nickname;
+							}
 //							System.out.println("End change : " + new Date());
 						}
 						catch(Exception e) {
