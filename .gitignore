@@ -1,3 +1,4 @@
 docker/javacongressus.img
 configurations
 java-project/bin
+deploy.sh
