@@ -51,7 +51,7 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 		jdaBuilder.addEventListener(new EventListener() {
 			@Override
 			public void onEvent(Event event) {
-				System.out.println(event);
+//				System.out.println(event);
 			}
 		});
 
@@ -97,11 +97,11 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
 		if (event.isFromType(ChannelType.PRIVATE)) {
-			System.out.printf("[PM] %s: %s\n", event.getAuthor().getName(), event.getMessage().getContent());
+//			System.out.printf("[PM] %s: %s\n", event.getAuthor().getName(), event.getMessage().getContent());
 		} 
 		else {
-			System.out.printf("[%s][%s] %s: %s\n", event.getGuild().getName(), event.getTextChannel().getName(),
-					event.getMember().getEffectiveName(), event.getMessage().getContent());
+//			System.out.printf("[%s][%s] %s: %s\n", event.getGuild().getName(), event.getTextChannel().getName(),
+//					event.getMember().getEffectiveName(), event.getMessage().getContent());
 		}
 	}
 

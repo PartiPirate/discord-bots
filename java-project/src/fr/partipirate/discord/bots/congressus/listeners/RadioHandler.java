@@ -148,16 +148,16 @@ public class RadioHandler extends ListenerAdapter {
 	        this.playingTrack  = track;
 	        
 	        if (track == null) {
-	        	System.out.println("Aucune musique");
+//	        	System.out.println("Aucune musique");
 	        	getNext(manager);
 	        } 
 	        else {
 				if (track.getInfo().length - track.getPosition() < DELAY) {
-					System.out.println("Reste moins de 10s : " + getTimestamp(track.getPosition()) + " / " + getTimestamp(track.getInfo().length));
+//					System.out.println("Reste moins de 10s : " + getTimestamp(track.getPosition()) + " / " + getTimestamp(track.getInfo().length));
 					getNext(manager);
 				}
 				else {
-					System.out.println("Ca joue : " + getTimestamp(track.getPosition()) + " / " + getTimestamp(track.getInfo().length));
+//					System.out.println("Ca joue : " + getTimestamp(track.getPosition()) + " / " + getTimestamp(track.getInfo().length));
 				}
 			}
 		}
