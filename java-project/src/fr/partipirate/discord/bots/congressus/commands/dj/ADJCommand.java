@@ -1,6 +1,7 @@
 package fr.partipirate.discord.bots.congressus.commands.dj;
 
 import fr.partipirate.discord.bots.congressus.commands.ICommand;
+import fr.partipirate.discord.bots.congressus.Configuration;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
@@ -9,6 +10,7 @@ import net.dv8tion.jda.core.entities.User;
 public abstract class ADJCommand implements ICommand {
 
 	public static String DJ_PIRATE_ROLE = "dj pirate";
+	protected String djRoleName = null;
 	
 	protected Member getMember(User user, Guild guild) {
 		if (guild == null) return null;
@@ -16,11 +18,22 @@ public abstract class ADJCommand implements ICommand {
 		return guild.getMember(user);
 	}
 
+	protected String getDJRoleName() {
+		if (djRoleName == null) {
+			djRoleName = (Configuration.getInstance().OPTIONS.get("djRoleName") != null) ? Configuration.getInstance().OPTIONS.get("djRoleName").get("djRoleName") : null;
+		}
+		if (djRoleName == null) {
+			djRoleName = DJ_PIRATE_ROLE;
+		}
+		
+		return djRoleName;
+	}
+
 	protected boolean isDJ(Member member) {
 		if (member == null) return false;
 		
 		for (Role role : member.getRoles()) {
-			if (role.getName().equalsIgnoreCase(DJ_PIRATE_ROLE)) return true;
+			if (role.getName().equalsIgnoreCase(getDJRoleName())) return true;
 		}
 		
 		return false;
