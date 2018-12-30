@@ -61,10 +61,10 @@ public class RadioHandler extends ListenerAdapter {
 		checkStatusThread.start();
 		
 		Thread showNameThread = new Thread() {
-			@Override
 			
 			private String lastNickname = "";
 			
+			@Override
 			public void run() {
 				int position = 0;
 				
