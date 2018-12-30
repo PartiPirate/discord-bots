@@ -201,9 +201,13 @@ public class RadioHandler extends ListenerAdapter {
 				loadUrl(manager, trackUrl);
 				System.out.println("Url  : " + trackUrl);
 			}
-			
-			System.out.println("Number of tracks : " + object.getInt("numberOfTracks"));
-			System.out.println("Durations of tracks : " + getTimestamp(object.getInt("durationOfTracks") * 1000L));
+
+			if (object.has("numberOfTracks")) {
+				System.out.println("Number of tracks : " + object.getInt("numberOfTracks"));
+			}
+			if (object.has("durationOfTracks")) {
+				System.out.println("Durations of tracks : " + getTimestamp(object.getInt("durationOfTracks") * 1000L));
+			}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
