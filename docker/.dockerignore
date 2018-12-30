@@ -1,0 +1,4 @@
+../java-project/*.mp3
+../java-project/*.img
+../java-project/*.json
+build.sh
