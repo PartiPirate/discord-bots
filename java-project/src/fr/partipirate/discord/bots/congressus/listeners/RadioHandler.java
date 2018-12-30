@@ -117,7 +117,7 @@ public class RadioHandler extends ListenerAdapter {
 //							System.out.println("Start change : " + new Date());
 //							System.out.println("Change nickname to : " + nickName);
 
-							if (!nickname.equals(this.lastNickname) {
+							if (!nickname.equals(this.lastNickname)) {
 								congressusBot.setBotNickname(nickname);
 								this.lastNickname = nickname;
 							}
