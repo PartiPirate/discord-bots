@@ -2,3 +2,7 @@
 ../java-project/*.img
 ../java-project/*.json
 build.sh
+compile.sh
+.gitignore
+.git
+configurations
