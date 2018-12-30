@@ -20,6 +20,7 @@ import fr.partipirate.discord.bots.congressus.CongressusBot;
 import fr.partipirate.discord.bots.congressus.GuildMusicManager;
 import fr.partipirate.discord.bots.congressus.commands.radio.RadioHelper;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.core.entities.Game;
 
 public class RadioHandler extends ListenerAdapter {
 
@@ -41,6 +42,19 @@ public class RadioHandler extends ListenerAdapter {
 		return INSTANCE;
 	}
 
+	public void resetGameTitle(AudioTrack track) {
+//		AudioTrack track = playingTrack;
+
+        if (track == null) {
+			this.congressusBot.getJDA().getPresence().setGame(null);
+			System.out.println("Show no title");
+        }
+        else {
+			this.congressusBot.getJDA().getPresence().setGame(Game.of(track.getInfo().title));
+			System.out.println("Show " + track.getInfo().title);
+        }
+	}
+
 	private void launchRadioSupervisor() {
 		Thread checkStatusThread = new Thread() {
 			@Override
@@ -48,7 +62,7 @@ public class RadioHandler extends ListenerAdapter {
 				while(true) { // check the bot connection status
 					synchronized (this) {
 						try {
-							System.out.println("Check radio status");
+//							System.out.println("Check radio status");
 							checkRadioStatus();
 							this.wait(DELAY);
 						} catch (InterruptedException e) {
@@ -59,89 +73,6 @@ public class RadioHandler extends ListenerAdapter {
 			}
 		};
 		checkStatusThread.start();
-		
-		Thread showNameThread = new Thread() {
-			
-			private String lastNickname = "";
-			
-			@Override
-			public void run() {
-				int position = 0;
-				
-				while(true) { // check the bot connection status
-					synchronized (this) {
-						try {
-							StringBuilder nicknameBuilder = new StringBuilder(Configuration.getInstance().NAME);
-							String nickname = nicknameBuilder.toString();
-
-							if (isTitleAware) {
-								AudioTrack track = playingTrack;
-
-						        if (track == null) {
-						        }
-						        else {
-						        	nicknameBuilder.append(" - ");
-						        	nicknameBuilder.append(track.getInfo().title);
-/*						        	
-							        	nickBuilder.append(" - ");
-							        	nickBuilder.append(getTimestamp(track.getPosition()));
-							        	nickBuilder.append(" / ");
-							        	nickBuilder.append(getTimestamp(track.getInfo().length));
-*/						        	
-						        	nicknameBuilder.append("            ");
-						        }
-
-								nickname = nicknameBuilder.toString();
-
-								int beginIndex = position;
-								int endIndex = beginIndex + 32;
-	
-								if (endIndex > nickname.length() && beginIndex != 0) {
-									position = 0;
-	
-									beginIndex = position;
-									endIndex = beginIndex + 32;
-	
-									if (endIndex > nickname.length()) {
-										endIndex = nickname.length();
-									}
-								}
-								else if (endIndex > nickname.length() && beginIndex == 0) {
-									endIndex = nickname.length();
-								}
-
-								nickname = nickname.substring(beginIndex, endIndex);
-								position += 2;
-							}
-
-//							System.out.println("Start change : " + new Date());
-//							System.out.println("Change nickname to : " + nickName);
-
-							if (!nickname.equals(this.lastNickname)) {
-								congressusBot.setBotNickname(nickname);
-								this.lastNickname = nickname;
-							}
-//							System.out.println("End change : " + new Date());
-						}
-						catch(Exception e) {
-							e.printStackTrace();
-						}
-
-						try {
-							this.wait(100L); // Just in case, the nickname setting has a delay 
-						} 
-						catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-			
-		};
-		
-		if (Configuration.getInstance().NAME != null) {
-			showNameThread.start();
-		}
 	}
 	
 	public void checkRadioStatus() {

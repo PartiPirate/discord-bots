@@ -94,6 +94,10 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 		}
 	}
 
+	public JDA getJDA() {
+		return this.jda;
+	}
+
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
 		if (event.isFromType(ChannelType.PRIVATE)) {

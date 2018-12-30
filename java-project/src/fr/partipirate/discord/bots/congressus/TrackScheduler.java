@@ -22,6 +22,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 
+import fr.partipirate.discord.bots.congressus.listeners.RadioHandler;
+
 /**
  * This class schedules tracks for the audio player. It contains the queue of
  * tracks.
@@ -70,7 +72,18 @@ public class TrackScheduler extends AudioEventAdapter {
 		// stop the player.
 		player.startTrack(queue.poll(), false);
 		
+
 		writeConfiguration();
+	}
+	
+	@Override
+	public void onTrackStart(AudioPlayer player, AudioTrack track) {
+		if (RadioHandler.getInstance().getTitleAware()) {
+			RadioHandler.getInstance().resetGameTitle(track);
+		}
+		else {
+			RadioHandler.getInstance().resetGameTitle(null);
+		}
 	}
 
 	@Override

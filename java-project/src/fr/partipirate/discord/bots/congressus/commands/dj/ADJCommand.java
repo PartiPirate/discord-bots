@@ -20,12 +20,14 @@ public abstract class ADJCommand implements ICommand {
 
 	protected String getDJRoleName() {
 		if (djRoleName == null) {
-			djRoleName = (Configuration.getInstance().OPTIONS.get("djRoleName") != null) ? Configuration.getInstance().OPTIONS.get("djRoleName").get("djRoleName") : null;
+			djRoleName = (Configuration.getInstance().OPTIONS.get("radio") != null) ? Configuration.getInstance().OPTIONS.get("radio").get("djRoleName") : null;
 		}
 		if (djRoleName == null) {
 			djRoleName = DJ_PIRATE_ROLE;
 		}
-		
+
+//		System.out.println("DJ Role name : " + djRoleName);
+
 		return djRoleName;
 	}
 
@@ -33,6 +35,7 @@ public abstract class ADJCommand implements ICommand {
 		if (member == null) return false;
 		
 		for (Role role : member.getRoles()) {
+//			System.out.println("Actual Role name : " + role.getName());
 			if (role.getName().equalsIgnoreCase(getDJRoleName())) return true;
 		}
 		
