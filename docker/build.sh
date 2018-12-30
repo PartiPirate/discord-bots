@@ -1,7 +1,9 @@
 #!/bin/sh
 
-docker rmi java-congressus
-docker build -t java-congressus .
-docker save -o javacongressus.img java-congressus
+sudo ln -s ../java-project java-congressus
+sudo docker rmi java-congressus
+sudo docker build -t java-congressus .
+sudo docker save -o javacongressus.img java-congressus
 chmod a+w javacongressus.img
 chmod a+r javacongressus.img
+sudo rm java-congressus

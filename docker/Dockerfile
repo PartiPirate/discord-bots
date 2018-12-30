@@ -1,5 +1,6 @@
 FROM openjdk:8
-COPY ../java-project/ /usr/src/congressus
+LABEL maintainer="contact@partipirate.org"
+COPY java-congressus/ /usr/src/congressus
 WORKDIR /usr/src/congressus
 ENV configuration=configuration_welcome.json
 CMD ["/bin/bash","entrypoint.sh"]
