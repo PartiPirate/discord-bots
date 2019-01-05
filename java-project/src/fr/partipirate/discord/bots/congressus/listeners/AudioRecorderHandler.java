@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+import fr.partipirate.discord.bots.congressus.Configuration;
+
 import net.dv8tion.jda.core.audio.AudioReceiveHandler;
 import net.dv8tion.jda.core.audio.CombinedAudio;
 import net.dv8tion.jda.core.audio.UserAudio;
@@ -17,6 +19,15 @@ public class AudioRecorderHandler implements AudioReceiveHandler {
 	private FileOutputStream fis = null;
 	private String filename = null;
 	
+	
+	public String getRecorderDir() {
+		String recorderDir = (Configuration.getInstance().OPTIONS.get("recorder") != null) ? (Configuration.getInstance().OPTIONS.get("recorder").get("audio") != null ? Configuration.getInstance().OPTIONS.get("recorder").get("audio") : "")  : "";
+
+		System.out.println(recorderDir);
+
+		return recorderDir;
+	}
+
 	public String getFilename(String extension) {
 		return filename + "." + extension;
 	}
@@ -29,10 +40,10 @@ public class AudioRecorderHandler implements AudioReceiveHandler {
 		this.id = ++seed;
 		this.start= System.currentTimeMillis();
 		this.recording = true;
-		
+
 		// open outputstream
 		try {
-			File file = new File(this.id + "-" + System.currentTimeMillis());
+			File file = new File(getRecorderDir() + this.id + "-" + System.currentTimeMillis());
 			filename = file.getAbsolutePath();
 			fis = new FileOutputStream(getFilename("pcm"));
 		} 
@@ -43,7 +54,7 @@ public class AudioRecorderHandler implements AudioReceiveHandler {
 	
 	public long endRecording() {
 		long end = System.currentTimeMillis();
-		
+
 		this.recording = false;
 
 		// close outputstream

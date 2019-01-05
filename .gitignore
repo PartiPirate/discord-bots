@@ -2,3 +2,6 @@ docker/javacongressus.img
 configurations
 java-project/bin
 deploy.sh
+mp3
+pcm
+audio
