@@ -43,13 +43,13 @@ public class RecordCommand implements ICommand {
 				vocalChannelBuilder.append(commandParts[i]);
 				separator = " ";
 			}
-			
+
 			String vocalChannel = vocalChannelBuilder.toString();
-			
+
 			bot.connectToVoiceChannel(guild.getAudioManager(), vocalChannel);
 
 			AudioRecorderHandler recorder = new AudioRecorderHandler();
-			
+
 			if (guild.getAudioManager().getReceiveHandler() != null) {
 				AudioReceiveHandler previousHandler = guild.getAudioManager().getReceiveHandler();
 				if (previousHandler instanceof AudioRecorderHandler) {

@@ -50,6 +50,7 @@ public class AudioRecorderHandler implements AudioReceiveHandler {
 		catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Start recording");
 	}
 	
 	public long endRecording() {
@@ -65,11 +66,15 @@ public class AudioRecorderHandler implements AudioReceiveHandler {
 			e.printStackTrace();
 		}
 
+		System.out.println("Stop recording");
+
 		return end - start;
 	}
 	
 	@Override
 	public boolean canReceiveCombined() {
+		System.out.println("Recording :" + this.recording);
+
 		return this.recording;
 	}
 
@@ -81,7 +86,9 @@ public class AudioRecorderHandler implements AudioReceiveHandler {
 	@Override
 	public void handleCombinedAudio(CombinedAudio combinedAudio) {
 		byte[] data = combinedAudio.getAudioData(1.0);
+		System.out.println(combinedAudio.getUsers());
 		System.out.println(data.length);
+		System.out.println(data[0] + " " + data[1]);
 		
 		// close outputstream
 		try {

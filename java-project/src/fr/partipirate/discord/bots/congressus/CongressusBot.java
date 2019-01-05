@@ -145,7 +145,7 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 		}
 
 		guild.getAudioManager().setSendingHandler(musicManager.getSendHandler());
-		
+
 		return musicManager;
 	}
 
@@ -232,7 +232,7 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 		if (!audioManager.isConnected() && !audioManager.isAttemptingToConnect()) {
 
 			audioManager.setConnectionListener(new SpeakingVolumeHandler(audioManager, this));
-			
+
 			VoiceChannel foundVoiceChannel = null;
 			VoiceChannel firstVoiceChannel = null;
 
@@ -252,6 +252,7 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 				audioManager.openAudioConnection(firstVoiceChannel);
 			}
 
+			System.out.println("Volume " + Configuration.getInstance().VOLUME);
 			getPlayer(audioManager.getGuild()).setVolume(Configuration.getInstance().VOLUME);
 		}
 	}

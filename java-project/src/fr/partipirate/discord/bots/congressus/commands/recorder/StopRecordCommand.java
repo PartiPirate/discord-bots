@@ -89,6 +89,8 @@ public class StopRecordCommand implements ICommand {
 			}
 
 			guild.getAudioManager().closeAudioConnection();
+			guild.getAudioManager().setReceivingHandler(null);
+
 		}
 	}
 
