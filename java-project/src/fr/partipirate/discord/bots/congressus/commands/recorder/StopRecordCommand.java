@@ -39,6 +39,7 @@ public class StopRecordCommand implements ICommand {
         	channel.sendMessage("*Vous n'avez pas les droits suffisants*").complete();
 		}
 		else {
+/*			
 			StringBuilder vocalChannelBuilder = new StringBuilder();
 			String separator = "";
 			for (int i = 1; i < commandParts.length; i++) {
@@ -48,14 +49,15 @@ public class StopRecordCommand implements ICommand {
 			}
 			
 			String vocalChannel = vocalChannelBuilder.toString();
-
+*/
 			if (guild.getAudioManager().getReceiveHandler() != null) {
 				AudioReceiveHandler previousHandler = guild.getAudioManager().getReceiveHandler();
 				if (previousHandler instanceof AudioRecorderHandler) {
 					AudioRecorderHandler recorder = (AudioRecorderHandler)previousHandler;
 					recorder.endRecording();
 
-					channel.sendMessage("*L'enregistrement est terminé sur **" + vocalChannel + "***").complete();
+//					channel.sendMessage("*L'enregistrement est terminé sur **" + vocalChannel + "***").complete();
+					channel.sendMessage("*L'enregistrement est terminé*").complete();
 	
 					String source = recorder.getFilename("pcm");
 					String destination = recorder.getFilename("mp3");
@@ -78,6 +80,10 @@ public class StopRecordCommand implements ICommand {
 						}
 
 						channel.sendMessage("*Fin de l'encodage en mp3*").complete();
+
+						if (Configuration.getInstance().OPTIONS.get("recorder") != null && Configuration.getInstance().OPTIONS.get("recorder").get("host") != null) {
+							channel.sendMessage("Enregistrement disponible ici : " + Configuration.getInstance().OPTIONS.get("recorder").get("host") + recorder.getFilename("mp3")).complete();
+						}
 					}
 					catch (Exception e) {
 						e.printStackTrace();
@@ -90,13 +96,12 @@ public class StopRecordCommand implements ICommand {
 
 			guild.getAudioManager().closeAudioConnection();
 			guild.getAudioManager().setReceivingHandler(null);
-
 		}
 	}
 
 	@Override
 	public String getCommandHelp() {
-		return "Arrête l'enregistrement sonore sur le canal indiqué";
+		return "Arrête l'enregistrement sonore en cours";
 	}
 
 }
