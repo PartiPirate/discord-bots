@@ -82,7 +82,7 @@ public class StopRecordCommand implements ICommand {
 						channel.sendMessage("*Fin de l'encodage en mp3*").complete();
 
 						if (Configuration.getInstance().OPTIONS.get("recorder") != null && Configuration.getInstance().OPTIONS.get("recorder").get("host") != null) {
-							channel.sendMessage("Enregistrement disponible ici : " + Configuration.getInstance().OPTIONS.get("recorder").get("host") + recorder.getFilename("mp3")).complete();
+							channel.sendMessage("Enregistrement disponible ici : " + Configuration.getInstance().OPTIONS.get("recorder").get("host") + recorder.getRelativeFilePath("mp3")).complete();
 						}
 					}
 					catch (Exception e) {

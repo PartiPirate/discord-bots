@@ -28,6 +28,13 @@ public class AudioRecorderHandler implements AudioReceiveHandler {
 		return recorderDir;
 	}
 
+	public String getRelativeFilePath(String extension) {
+		File file = new File(getFilename(extension));
+		String filename = file.getName();
+		
+		return getRecorderDir() + filename;
+	}
+
 	public String getFilename(String extension) {
 		return filename + "." + extension;
 	}
