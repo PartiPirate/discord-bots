@@ -88,6 +88,8 @@ public class TrackScheduler extends AudioEventAdapter {
 
 	@Override
 	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+		System.out.println(endReason);
+
 		// Only start the next track if the end reason is suitable for it
 		// (FINISHED or LOAD_FAILED)
 		if (endReason.mayStartNext) {
@@ -95,6 +97,17 @@ public class TrackScheduler extends AudioEventAdapter {
 		}
 	}
 	
+	/**
+	 * @param player Audio player
+	 * @param track Audio track where the exception occurred
+	 * @param exception The exception that occurred
+	 */
+	@Override
+	public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
+		System.out.println(exception);
+		exception.printStackTrace();
+	}
+
 	public AudioTrack[] getTracks() {
 		AudioTrack[] tracks = queue.toArray(new AudioTrack[queue.size()]);
 		
