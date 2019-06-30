@@ -15,12 +15,11 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import fr.partipirate.discord.bots.congressus.Configuration;
 import fr.partipirate.discord.bots.congressus.CongressusBot;
 import fr.partipirate.discord.bots.congressus.GuildMusicManager;
 import fr.partipirate.discord.bots.congressus.commands.radio.RadioHelper;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 public class RadioHandler extends ListenerAdapter {
 

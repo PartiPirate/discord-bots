@@ -1,27 +1,20 @@
 package fr.partipirate.discord.bots.congressus.listeners;
 
-import java.io.InputStreamReader;
-import java.io.StringWriter;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Iterator;
 import java.util.Map;
-
-import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
-import fr.partipirate.discord.bots.congressus.Configuration;
 import fr.partipirate.discord.bots.congressus.CongressusBot;
 import fr.partipirate.discord.bots.congressus.GuildMusicManager;
-import fr.partipirate.discord.bots.congressus.commands.radio.RadioHelper;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import net.dv8tion.jda.core.entities.Game;
 
+/**
+ * Add an handler for the recorder, emitting some silenced sound
+ */
 public class RecorderHandler extends ListenerAdapter {
 
 	private static final long DELAY = 5000L;

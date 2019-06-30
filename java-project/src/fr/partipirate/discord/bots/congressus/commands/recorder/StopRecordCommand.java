@@ -1,21 +1,21 @@
 package fr.partipirate.discord.bots.congressus.commands.recorder;
 
 import java.io.BufferedReader;
-import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import fr.partipirate.discord.bots.congressus.Configuration;
 import fr.partipirate.discord.bots.congressus.commands.ICommand;
 import fr.partipirate.discord.bots.congressus.listeners.AudioRecorderHandler;
-import fr.partipirate.discord.bots.congressus.Configuration;
-
 import net.dv8tion.jda.core.audio.AudioReceiveHandler;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.entities.User;
 
-public class StopRecordCommand implements ICommand {
+public class StopRecordCommand extends ARecorderCommand implements ICommand {
 
 	public StopRecordCommand() {
 	}
@@ -25,11 +25,24 @@ public class StopRecordCommand implements ICommand {
 		return "stopRecord";
 	}
 
-	@Override
-	public boolean canDoCommand(User user, Guild guild) {
-		return user.getName().equalsIgnoreCase("farlistener");
-	}
+	private void mp3ize(String source, String destination) throws IOException {
+		System.out.println("MP3ize " + source + " to " + destination);
 
+//			ffmpeg -f s16be -ar 48k -ac 2 -i 1-1508429227280.pcm 1-1508429227280.pcm.mp3
+			Process process = new ProcessBuilder(
+					"ffmpeg","-f","s16be","-ar","48k","-ac","2","-i", source, destination).start();
+			InputStream is = process.getInputStream();
+			InputStreamReader isr = new InputStreamReader(is);
+			BufferedReader br = new BufferedReader(isr);
+			String line;
+
+//			System.out.printf("Output of running %s is:", Arrays.toString(args));
+
+			while ((line = br.readLine()) != null) {
+			  System.out.println(line);
+			}
+	}
+	
 	@Override
 	public void doCommand(User user, MessageChannel channel, Guild guild, String[] commandParts) {
 		if (channel instanceof PrivateChannel) {
@@ -58,27 +71,22 @@ public class StopRecordCommand implements ICommand {
 
 //					channel.sendMessage("*L'enregistrement est terminé sur **" + vocalChannel + "***").complete();
 					channel.sendMessage("*L'enregistrement est terminé*").complete();
-	
-					String source = recorder.getFilename("pcm");
-					String destination = recorder.getFilename("mp3");
-
 					channel.sendMessage("*Début de l'encodage mp3*").complete();
 
 					try {
-//						ffmpeg -f s16be -ar 48k -ac 2 -i 1-1508429227280.pcm 1-1508429227280.pcm.mp3
-						Process process = new ProcessBuilder(
-								"ffmpeg","-f","s16be","-ar","48k","-ac","2","-i", source, destination).start();
-						InputStream is = process.getInputStream();
-						InputStreamReader isr = new InputStreamReader(is);
-						BufferedReader br = new BufferedReader(isr);
-						String line;
-	
-//						System.out.printf("Output of running %s is:", Arrays.toString(args));
-	
-						while ((line = br.readLine()) != null) {
-						  System.out.println(line);
-						}
+						String source = recorder.getFilename("pcm");
+						String destination = recorder.getFilename("mp3");
+						mp3ize(source, destination);
 
+						for (String filename : recorder.getUserFileOutputStreams().keySet()) {
+							FileOutputStream fis = recorder.getUserFileOutputStreams().get(filename);
+							fis.close();
+
+							source = filename;
+							destination = filename.replace(".pcm", ".mp3");
+							mp3ize(source, destination);
+						}
+						
 						channel.sendMessage("*Fin de l'encodage en mp3*").complete();
 
 						if (Configuration.getInstance().OPTIONS.get("recorder") != null && Configuration.getInstance().OPTIONS.get("recorder").get("host") != null) {

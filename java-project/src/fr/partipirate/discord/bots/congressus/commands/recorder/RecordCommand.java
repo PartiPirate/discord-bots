@@ -8,8 +8,9 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.VoiceChannel;
 
-public class RecordCommand implements ICommand {
+public class RecordCommand extends ARecorderCommand implements ICommand {
 
 	private CongressusBot bot;
 
@@ -20,11 +21,6 @@ public class RecordCommand implements ICommand {
 	@Override
 	public String getKeyWord() {
 		return "record";
-	}
-
-	@Override
-	public boolean canDoCommand(User user, Guild guild) {
-		return user.getName().equalsIgnoreCase("farlistener");
 	}
 
 	@Override
@@ -46,9 +42,9 @@ public class RecordCommand implements ICommand {
 
 			String vocalChannel = vocalChannelBuilder.toString();
 
-			bot.connectToVoiceChannel(guild.getAudioManager(), vocalChannel);
+			VoiceChannel voicedChannel = bot.connectToVoiceChannel(guild.getAudioManager(), vocalChannel);
 
-			AudioRecorderHandler recorder = new AudioRecorderHandler();
+			AudioRecorderHandler recorder = new AudioRecorderHandler(voicedChannel);
 
 			if (guild.getAudioManager().getReceiveHandler() != null) {
 				AudioReceiveHandler previousHandler = guild.getAudioManager().getReceiveHandler();

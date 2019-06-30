@@ -228,11 +228,12 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 		}
 	}
 	
-	public void connectToVoiceChannel(AudioManager audioManager, String channelName) {
+	public VoiceChannel connectToVoiceChannel(AudioManager audioManager, String channelName) {
 		if (!audioManager.isConnected() && !audioManager.isAttemptingToConnect()) {
 
 			audioManager.setConnectionListener(new SpeakingVolumeHandler(audioManager, this));
 
+			VoiceChannel choosedVoiceChannel = null;
 			VoiceChannel foundVoiceChannel = null;
 			VoiceChannel firstVoiceChannel = null;
 
@@ -243,18 +244,28 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 					foundVoiceChannel = voiceChannel;
 					break;
 				}
+				if (channelName.startsWith("~") && voiceChannel.getName().toLowerCase().contains(channelName.toLowerCase().substring(1))) {
+					foundVoiceChannel = voiceChannel;
+					break;
+				}
 			}
 
 			if (foundVoiceChannel != null) {
 				audioManager.openAudioConnection(foundVoiceChannel);
+				choosedVoiceChannel = foundVoiceChannel;
 			} 
 			else if (firstVoiceChannel != null) {
 				audioManager.openAudioConnection(firstVoiceChannel);
+				choosedVoiceChannel = firstVoiceChannel;
 			}
 
 			System.out.println("Volume " + Configuration.getInstance().VOLUME);
 			getPlayer(audioManager.getGuild()).setVolume(Configuration.getInstance().VOLUME);
+			
+			return choosedVoiceChannel;
 		}
+
+		return null;
 	}
 
 	public int previousVolume;
