@@ -202,7 +202,9 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
 		musicManager.scheduler.nextTrack();
 
-		channel.sendMessage("On passe à la suite").queue();
+		if (channel != null) {
+			channel.sendMessage("On passe à la suite").queue();
+		}
 	}
 
 	public void skipTrack(TextChannel channel, int trackNumber) {
@@ -210,6 +212,10 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 		AudioTrack track = musicManager.scheduler.forgetTrack(trackNumber);
 
 		channel.sendMessage("On oublie la piste *" + track.getInfo().title + "*").queue();
+
+		if (channel != null) {
+			channel.sendMessage("On passe à la suite").queue();
+		}
 	}
 	
 	public void shuffle(TextChannel channel) {
