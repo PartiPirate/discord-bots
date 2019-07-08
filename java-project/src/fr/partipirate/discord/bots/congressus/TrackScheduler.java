@@ -53,7 +53,7 @@ public class TrackScheduler extends AudioEventAdapter {
 							TrackOptions trackOptions = RadioHandler.getInstance().trackOptions
 									.get(track.getInfo().uri);
 
-							if (trackOptions.finishTime != null) {
+							if (trackOptions != null && trackOptions.finishTime != null) {
 								if ((Math.round(trackOptions.finishTime * 1000)
 										- track.getPosition()) <= 0) {
 //									System.out.println("Shorten version finish");
@@ -130,11 +130,11 @@ public class TrackScheduler extends AudioEventAdapter {
 
 			TrackOptions options = RadioHandler.getInstance().trackOptions.get(track.getInfo().uri);
 
-			if (options.startTime != null) {
+			if (options != null && options.startTime != null) {
 				track.setPosition(Math.round(options.startTime * 1000));
 			}
 
-			if (options.finishTime != null) {
+			if (options != null && options.finishTime != null) {
 				Thread shortenTrackThread = new ShortenTrackThread(this, track);
 				shortenTrackThread.start();
 				track.setUserData(shortenTrackThread);

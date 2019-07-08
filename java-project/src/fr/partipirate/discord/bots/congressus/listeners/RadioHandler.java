@@ -89,7 +89,7 @@ public class RadioHandler extends ListenerAdapter {
 				getNext(manager);
 			} else {
 				TrackOptions trackOptions = this.trackOptions.get(track.getInfo().uri);
-				long trackLength = trackOptions.finishTime != null ? Math.round(trackOptions.finishTime * 1000) : track.getInfo().length; 
+				long trackLength = (trackOptions != null && trackOptions.finishTime != null) ? Math.round(trackOptions.finishTime * 1000) : track.getInfo().length; 
 
 				if ((trackLength - track.getPosition()) < DELAY) {
 //					System.out.println("Reste moins de 10s : " + getTimestamp(track.getPosition()) + " / "
@@ -171,7 +171,7 @@ public class RadioHandler extends ListenerAdapter {
 
 				manager.scheduler.queue(firstTrack);
 			}
-
+			
 			@Override
 			public void noMatches() {
 				System.err.println("No match for " + trackUrl);
@@ -181,6 +181,12 @@ public class RadioHandler extends ListenerAdapter {
 			public void loadFailed(FriendlyException exception) {
 				System.err.println("Exception for " + trackUrl);
 				exception.printStackTrace();
+
+				// No more usable
+				RadioHelper.deleteTrack(trackUrl);
+				
+				// Error, so next right now
+				getNext(manager);
 			}
 		});
 	}
