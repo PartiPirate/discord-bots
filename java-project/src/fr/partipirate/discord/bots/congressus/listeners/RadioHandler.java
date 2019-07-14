@@ -1,15 +1,10 @@
 package fr.partipirate.discord.bots.congressus.listeners;
 
-import java.io.InputStreamReader;
-import java.io.StringWriter;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -104,30 +99,9 @@ public class RadioHandler extends ListenerAdapter {
 	}
 
 	private void getNext(GuildMusicManager manager) {
-		String nextCall = RadioHelper.getUrl("do_getNext");
-//		String nextCall = "https://radio.partipirate.org/api.php?method=do_getNext";
-		System.out.println(nextCall);
-
 		try {
-			URL url = new URL(nextCall);
-			URLConnection connection = url.openConnection();
-			InputStreamReader sr = new InputStreamReader(connection.getInputStream());
-			StringWriter sw = new StringWriter();
-
-			char[] buffer = new char[8192];
-			int nbRead;
-
-			while ((nbRead = sr.read(buffer)) != -1) {
-				sw.write(buffer, 0, nbRead);
-			}
-
-			sr.close();
-			sw.close();
-
-			String json = sw.toString();
-
-			JSONObject object = (JSONObject) new JSONTokener(json).nextValue();
-
+			JSONObject object = RadioHelper.getNext();
+			
 			if (object.has("track")) {
 				JSONObject track = object.getJSONObject("track");
 				String trackUrl = track.getString("tra_url");

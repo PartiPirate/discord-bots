@@ -267,7 +267,7 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 
 			System.out.println("Volume " + Configuration.getInstance().VOLUME);
 			getPlayer(audioManager.getGuild()).setVolume(Configuration.getInstance().VOLUME);
-			
+
 			return choosedVoiceChannel;
 		}
 

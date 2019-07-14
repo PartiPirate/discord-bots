@@ -44,6 +44,8 @@ public class RecordCommand extends ARecorderCommand implements ICommand {
 
 			VoiceChannel voicedChannel = bot.connectToVoiceChannel(guild.getAudioManager(), vocalChannel);
 
+			System.out.println("Connect on " + voicedChannel.getName());
+			
 			AudioRecorderHandler recorder = new AudioRecorderHandler(voicedChannel);
 
 			if (guild.getAudioManager().getReceiveHandler() != null) {
@@ -57,7 +59,7 @@ public class RecordCommand extends ARecorderCommand implements ICommand {
 
 			recorder.startRecording();
 			
-			channel.sendMessage("*L'enregistrement commence sur **" + vocalChannel + "***").complete();
+			channel.sendMessage("*L'enregistrement commence sur **" + voicedChannel.getName() + "***").complete();
 		}
 	}
 

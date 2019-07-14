@@ -10,6 +10,9 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import fr.partipirate.discord.bots.congressus.CongressusBot;
 import fr.partipirate.discord.bots.congressus.GuildMusicManager;
+import net.dv8tion.jda.core.audio.AudioReceiveHandler;
+import net.dv8tion.jda.core.entities.PrivateChannel;
+import net.dv8tion.jda.core.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 /**
@@ -33,11 +36,26 @@ public class RecorderHandler extends ListenerAdapter {
 		return INSTANCE;
 	}
 
-/*
-	public void resetGameTitle(List<Users> users) {
-		
+	public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
+		if (event.getMember().getUser().equals(event.getJDA().getSelfUser())) return; // Don't care
+		System.out.println(event);
+		AudioReceiveHandler audioReceiveHandler = event.getGuild().getAudioManager().getReceiveHandler();
+		if (audioReceiveHandler instanceof AudioRecorderHandler) {
+			AudioRecorderHandler recorder = (AudioRecorderHandler)audioReceiveHandler;
+			// If the recorder is the recording and the joined channel is the one recorded then ...
+			if (recorder.isRecording() && recorder.getVoiceChannel().equals(event.getChannelJoined())) {
+				PrivateChannel privateChannel = event.getMember().getUser().openPrivateChannel().complete();
+
+				StringBuilder sb = new StringBuilder();
+
+				sb.append("_Le salon vocal **");
+				sb.append(recorder.getVoiceChannel().getName());
+				sb.append("** est en cours d'enregistrement_");
+
+				privateChannel.sendMessage(sb.toString()).complete();
+			}
+		}
 	}
-*/
 
 	private void launchRadioSupervisor() {
 		Thread checkStatusThread = new Thread() {
