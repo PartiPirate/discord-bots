@@ -48,7 +48,7 @@ public class RadioHelper {
 			sb.append("&");
 			sb.append(property.getKey().toString());
 			sb.append("=");
-			sb.append(URLEncoder.encode(property.getKey().toString(), "UTF-8"));
+			sb.append(URLEncoder.encode(property.getValue().toString(), "UTF-8"));
 		}
 
 		return sb.toString();
