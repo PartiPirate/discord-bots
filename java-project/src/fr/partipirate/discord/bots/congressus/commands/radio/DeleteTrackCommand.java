@@ -97,6 +97,6 @@ public class DeleteTrackCommand extends ADJCommand implements ICommand {
 
 	@Override
 	public String getCommandHelp() {
-		return "Supprime une piste dans la base de donnée";
+		return "Supprime une piste dans la base de donnée [url|current]";
 	}
 }
