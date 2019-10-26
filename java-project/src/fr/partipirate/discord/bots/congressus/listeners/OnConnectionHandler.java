@@ -24,7 +24,7 @@ import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.user.UserOnlineStatusUpdateEvent;
+import net.dv8tion.jda.core.events.user.update.UserUpdateOnlineStatusEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.managers.GuildController;
 
@@ -61,10 +61,10 @@ public class OnConnectionHandler extends ListenerAdapter {
 	}
 	
 	@Override
-	public void onUserOnlineStatusUpdate(UserOnlineStatusUpdateEvent event) {
+	public void onUserUpdateOnlineStatus(UserUpdateOnlineStatusEvent event) {
 		Member member = event.getGuild().getMember(event.getUser());
-		
-		if (member.getOnlineStatus() == OnlineStatus.ONLINE && event.getPreviousOnlineStatus() == OnlineStatus.OFFLINE) {
+
+		if (member.getOnlineStatus() == OnlineStatus.ONLINE && event.getOldOnlineStatus() == OnlineStatus.OFFLINE) {
 //			if (!member.getEffectiveName().equals("farlistener")) return; // test only
 			System.out.println("Test permissions on " + event.getUser().getName() + "#" + event.getUser().getDiscriminator());
 			updateMember(member);

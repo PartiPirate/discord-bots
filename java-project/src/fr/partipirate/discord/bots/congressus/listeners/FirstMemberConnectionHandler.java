@@ -16,7 +16,7 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.user.UserOnlineStatusUpdateEvent;
+import net.dv8tion.jda.core.events.user.update.UserUpdateOnlineStatusEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 public class FirstMemberConnectionHandler extends ListenerAdapter {
@@ -30,10 +30,10 @@ public class FirstMemberConnectionHandler extends ListenerAdapter {
 	}
 	
 	@Override
-	public void onUserOnlineStatusUpdate(UserOnlineStatusUpdateEvent event) {
+	public void onUserUpdateOnlineStatus(UserUpdateOnlineStatusEvent event) {
 		Member member = event.getGuild().getMember(event.getUser());
 		
-		if (member.getOnlineStatus() == OnlineStatus.ONLINE && event.getPreviousOnlineStatus() == OnlineStatus.OFFLINE && !isWarnedUser(event.getUser())) {
+		if (member.getOnlineStatus() == OnlineStatus.ONLINE && event.getOldOnlineStatus() == OnlineStatus.OFFLINE && !isWarnedUser(event.getUser())) {
 			warnUser(event.getJDA(), event.getUser());
 		}
 	}

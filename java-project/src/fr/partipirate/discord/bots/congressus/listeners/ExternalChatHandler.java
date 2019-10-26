@@ -31,7 +31,7 @@ public class ExternalChatHandler extends ListenerAdapter {
 	}
 
 	private void handleMessage(User author, TextChannel textChannel, Message sourceMessage) {
-		String message = sourceMessage.getContent();
+		String message = sourceMessage.getContentRaw();
 		
 		if (author.getName().equals("Congressus")) {
 			return;

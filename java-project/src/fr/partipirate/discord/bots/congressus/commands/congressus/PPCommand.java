@@ -122,7 +122,7 @@ public class PPCommand extends ACongressusCommand implements ICommand {
 				String[] point10 =  {"X – Les Pirates relient.", "Nous, Pirates constatons que tant les bonheurs individuels que communs se fondent sur les liens que nous tissons avec nous mêmes, les autres, la société, la nature et le monde. Par la numérisation et Internet, la moitié de la population mondiale est connectée en un réseau horizontal et décentralisé. Cette conscience collective transforme le monde."};
 				return point10;
 			case 11:
-				String[] point11 =  {"Les Pirates font confiance.", "Nous, Pirates avons confiance en nous et osons faire confiance aux autres. Nous croyons en la collaboration et contribuons aux communs ainsi qu’aux projets collectifs. Nous portons un regard bienveillant sur la vie en communauté."};
+				String[] point11 =  {"XI - Les Pirates font confiance.", "Nous, Pirates avons confiance en nous et osons faire confiance aux autres. Nous croyons en la collaboration et contribuons aux communs ainsi qu’aux projets collectifs. Nous portons un regard bienveillant sur la vie en communauté."};
 				return point11;
 			case 12:
 				String[] point12 =  {"XII – Les Pirates font preuve d’audace.", "Nous, Pirates, n’attendons pas que des solutions viennent à nous mais nous organisons par nous-mêmes pour répondre aux problèmes que nous rencontrons. Nous croyons en la force des mouvements collaboratifs et horizontaux."};

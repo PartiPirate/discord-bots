@@ -53,6 +53,8 @@ public class AddTrackCommand extends ADJCommand implements ICommand {
 	private void addTrack(MessageChannel channel, String trackUrl) {
 		GuildMusicManager manager = bot.getMusicManagers().values().iterator().next();
 
+		System.out.println("Add track : " + trackUrl);
+		
 		bot.getPlayerManager().loadItemOrdered(manager, trackUrl, new AudioLoadResultHandler() {
 			@Override
 			public void trackLoaded(AudioTrack track) {
@@ -82,10 +84,13 @@ public class AddTrackCommand extends ADJCommand implements ICommand {
 
 			@Override
 			public void noMatches() {
+				System.out.println("Found nothing");
 			}
 
 			@Override
 			public void loadFailed(FriendlyException exception) {
+				System.out.println("Load fail");
+				exception.printStackTrace();
 			}
 		});
 	}

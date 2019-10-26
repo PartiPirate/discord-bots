@@ -118,6 +118,7 @@ public class TrackScheduler extends AudioEventAdapter {
 		// or not. In case queue was empty, we are
 		// giving null to startTrack, which is a valid argument and will simply
 		// stop the player.
+		RadioHandler.getInstance().resetGameTitle(null);
 		player.startTrack(queue.poll(), false);
 
 		writeConfiguration();
@@ -148,6 +149,7 @@ public class TrackScheduler extends AudioEventAdapter {
 	@Override
 	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
 		System.out.println(endReason);
+		RadioHandler.getInstance().resetGameTitle(null);
 
 		if (track.getUserData() != null && track.getUserData() instanceof ShortenTrackThread) {
 			ShortenTrackThread thread = (ShortenTrackThread) track.getUserData();

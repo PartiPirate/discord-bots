@@ -257,10 +257,12 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 			}
 
 			if (foundVoiceChannel != null) {
+				audioManager.setAutoReconnect(false);
 				audioManager.openAudioConnection(foundVoiceChannel);
 				choosedVoiceChannel = foundVoiceChannel;
 			} 
 			else if (firstVoiceChannel != null) {
+				audioManager.setAutoReconnect(false);
 				audioManager.openAudioConnection(firstVoiceChannel);
 				choosedVoiceChannel = firstVoiceChannel;
 			}
