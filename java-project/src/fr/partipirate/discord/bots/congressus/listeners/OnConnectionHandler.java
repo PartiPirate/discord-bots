@@ -41,11 +41,11 @@ public class OnConnectionHandler extends ListenerAdapter {
 //		DO_NOT_DISCARD.add("Administration");
 //		DO_NOT_DISCARD.add("DJ Pirate");
 //		DO_NOT_DISCARD.add("Camarades des Pirates");
-		TRANSLITERATIONS.put("Secrétaire de la Coordination Nationale", "Secrétaire de la CN");
-		TRANSLITERATIONS.put("Languedoc-Roussillon-Midi-Pyrénées", "Occitanie");
-		TRANSLITERATIONS.put("Nord-Pas-de-Calais-Picardie", "Hauts-de-France");
-		TRANSLITERATIONS.put("Alsace-Champagne-Ardennes-Lorraine", "Grand-Est");
-		TRANSLITERATIONS.put("Aquitaine-Limousin-Poitou-Charente", "Nouvelle-Aquitaine");
+//		TRANSLITERATIONS.put("Secrétaire de la Coordination Nationale", "Secrétaire de la CN");
+//		TRANSLITERATIONS.put("Languedoc-Roussillon-Midi-Pyrénées", "Occitanie");
+//		TRANSLITERATIONS.put("Nord-Pas-de-Calais-Picardie", "Hauts-de-France");
+//		TRANSLITERATIONS.put("Alsace-Champagne-Ardennes-Lorraine", "Grand-Est");
+//		TRANSLITERATIONS.put("Aquitaine-Limousin-Poitou-Charente", "Nouvelle-Aquitaine");
 	}
 
 	static {
@@ -150,16 +150,20 @@ public class OnConnectionHandler extends ListenerAdapter {
 				group = group.substring(0, 32);
 				System.out.println("Search role (reduce) for : " + group);
 			}
-			
-			List<Role> roles = member.getGuild().getRolesByName(group, false);
+
+			List<Role> roles = RoleHandler.getInstance().guildRoles.get(member.getGuild());
 			Role role = null;
-			if (roles.size() == 0) {
+			for(int index = 0; role == null && index < roles.size(); ++index) {
+				Role indexedRole = roles.get(index);
+				if (indexedRole.getName().equalsIgnoreCase(group)) {
+					role = indexedRole;
+					break;
+				}
+			}
+
+			if (role == null) {
 				role = controller.createRole().complete();
 				role.getManager().setName(group).complete();
-				System.out.println("Create role : " + role);
-			}
-			else {
-				role = roles.get(0);
 			}
 			
 			controller.addSingleRoleToMember(member, role).complete();

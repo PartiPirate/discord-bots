@@ -63,7 +63,7 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 
 		jdaBuilder.setBulkDeleteSplittingEnabled(false);
 
-		jdaBuilder.buildBlocking();
+		jdaBuilder.build().awaitReady();
 	}
 
 	private AudioPlayerManager playerManager;
