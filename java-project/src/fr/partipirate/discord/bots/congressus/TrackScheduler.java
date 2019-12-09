@@ -287,5 +287,19 @@ public class TrackScheduler extends AudioEventAdapter {
 
 		return forgottenTrack;
 	}
+	
+	/**
+	 * Clears the queue
+	 */
+	public void clear() {
+		queue.clear();
+	}
 
+	/**
+	 * Returns the number of tracks in the queue
+	 * @return int The number of tracks in the queue
+	 */
+	public int numberOfTracks() {
+		return queue.size();
+	}
 }

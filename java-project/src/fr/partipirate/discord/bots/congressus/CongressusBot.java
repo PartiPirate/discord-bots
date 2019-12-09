@@ -217,6 +217,15 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 			channel.sendMessage("On passe à la suite").queue();
 		}
 	}
+
+	public void emptyTracks(TextChannel channel) {
+		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
+		musicManager.scheduler.clear();
+
+		if (channel != null) {
+			channel.sendMessage("Hop là, plus rien à jouer").queue();
+		}
+	}
 	
 	public void shuffle(TextChannel channel) {
 		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
