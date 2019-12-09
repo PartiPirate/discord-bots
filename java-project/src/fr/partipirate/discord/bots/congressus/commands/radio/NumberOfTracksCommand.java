@@ -3,7 +3,6 @@ package fr.partipirate.discord.bots.congressus.commands.radio;
 import fr.partipirate.discord.bots.congressus.CongressusBot;
 import fr.partipirate.discord.bots.congressus.commands.ICommand;
 import fr.partipirate.discord.bots.congressus.commands.dj.ADJCommand;
-import fr.partipirate.discord.bots.congressus.listeners.RadioHandler;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.PrivateChannel;
@@ -20,7 +19,7 @@ public class NumberOfTracksCommand extends ADJCommand implements ICommand {
 	
 	@Override
 	public String getKeyWord() {
-		return "empty";
+		return "nbTracks";
 	}
 
 	@Override
