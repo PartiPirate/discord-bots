@@ -299,7 +299,7 @@ public class TrackScheduler extends AudioEventAdapter {
 	 * Returns the number of tracks in the queue
 	 * @return int The number of tracks in the queue
 	 */
-	public int numberOfTracks() {
+	public int getNumberOfTracks() {
 		return queue.size();
 	}
 }
