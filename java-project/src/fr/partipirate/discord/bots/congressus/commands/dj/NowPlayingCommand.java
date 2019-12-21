@@ -45,10 +45,20 @@ public class NowPlayingCommand extends ADJCommand implements ICommand {
         	channel.sendMessage("Aucune musique ").complete();
         } 
         else {
+
             AudioTrack track = getPlayer(guild).getPlayingTrack();
-            channel.sendMessage(String.format(QUEUE_DESCRIPTION, CD, getOrNull(track.getInfo().title),
-                    "\u23F1 **|>** `[ " + getTimestamp(track.getPosition()) + " / " + getTimestamp(track.getInfo().length) + " ]`",
-                    "" + MIC, getOrNull(track.getInfo().author))).complete();
+
+            // Create the EmbedBuilder instance
+            EmbedBuilder eb = new EmbedBuilder();
+
+			eb.setTitle(track.getInfo().title);
+
+			eb.setColor(new Color(0x41D55F));
+				
+			eb.addField("Artiste", track.getInfo().author, false);
+				
+			channel.sendMessage(eb.build()).complete();
+
         }
 	}
 
