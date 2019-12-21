@@ -54,8 +54,13 @@ public class NowPlayingCommand extends ADJCommand implements ICommand {
 			eb.setTitle(track.getInfo().title);
 
 			eb.setColor(new Color(0x41D55F));
+
+			eb.setAuthor(track.getInfo().author) ;
+
+			long timeDuration = track.getDuration() ;
+			long timePosition = track.getPosition() ;
 				
-			eb.addField("Artiste", track.getInfo().author, false);
+			eb.addField("", getTimestamp(timePosition) + " / " + getTimestamp(timeDuration), false);
 				
 			channel.sendMessage(eb.build()).complete();
 
