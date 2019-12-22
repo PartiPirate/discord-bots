@@ -51,7 +51,7 @@ public class NowPlayingCommand extends ADJCommand implements ICommand {
         } 
         else {
 
-            AudioTrack track = getPlayer(guild).getPlayingTrack();
+            AudioTrack track = getPlayer(guild).getPlayingTrack() ;
 
             // Create the EmbedBuilder instance
             EmbedBuilder eb = new EmbedBuilder();
