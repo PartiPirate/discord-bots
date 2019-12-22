@@ -58,43 +58,45 @@ public class NowPlayingCommand extends ADJCommand implements ICommand {
             
             eb.setColor(new Color(0x41D55F));
             
-            MusicBrainzTrackInfo trackInfo = RadioHelper.searchTrackInfo(track.getInfo().title, track.getInfo().author) ;
+            MusicBrainzTrackInfo trackInfo = RadioHelper.searchTrackInfo(track.getInfo().title, track.getInfo().author);
             
             if(trackInfo == null) {
-            	
-            	eb.setTitle(track.getInfo().title) ;
-    			eb.setAuthor(track.getInfo().author) ;
-    			
+            	eb.setTitle(track.getInfo().title);
+    			eb.setAuthor(track.getInfo().author);
             }
             else {
-            	
             	if (trackInfo.getRecordingName() == null) {
-            		eb.setTitle(track.getInfo().title) ;
+            		eb.setTitle(track.getInfo().title);
             	}
             	else {
-            		eb.setTitle(trackInfo.getRecordingName()) ;
+            		eb.setTitle(trackInfo.getRecordingName());
             	}
             	
             	if (trackInfo.getArtistName() == null) {
-            		eb.setTitle(track.getInfo().title) ;
+            		eb.setAuthor(track.getInfo().title);
             	}
             	else {
-            		eb.setTitle(trackInfo.getArtistName()) ;
+            		eb.setAuthor(trackInfo.getArtistName());
             	}
-            	
+
+            	if (trackInfo.getReleaseName() != null) {
+            		eb.setDescription(trackInfo.getReleaseName());
+            	}
+
             	if (trackInfo.getCoverURL() != null) {
-            		eb.setImage(trackInfo.getCoverURL()) ;
+            		System.out.println("Trying to put the cover : " + trackInfo.getCoverURL());
+//            		eb.setImage(trackInfo.getCoverURL());
+            		
+            		eb.setThumbnail(trackInfo.getCoverURL());
             	}
-            	
-            	
             }
 
+			long timeDuration = track.getDuration();
+			long timePosition = track.getPosition();
 
-			long timeDuration = track.getDuration() ;
-			long timePosition = track.getPosition() ;
-				
-			eb.addField("", getTimestamp(timePosition) + " / " + getTimestamp(timeDuration), true);
-				
+//			eb.addField("", getTimestamp(timePosition) + " / " + getTimestamp(timeDuration), true);
+			eb.setFooter("\u23f1\ufe0f " + getTimestamp(timePosition) + " / " + getTimestamp(timeDuration), null);
+			
 			channel.sendMessage(eb.build()).complete();
         }
 	}

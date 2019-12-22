@@ -3,11 +3,8 @@ package fr.partipirate.discord.bots.congressus.commands.radio;
 public class MusicBrainzTrackInfo {
 
 	private String recordingName, recordingID, recordingURL ;
-
 	private String artistName, artistID, artistURL ;
-
 	private String releaseName, releaseID ;
-
 	private String coverURL ;
 
 	// *** SETTERS
@@ -110,9 +107,7 @@ public class MusicBrainzTrackInfo {
 	}
 
 	// ** Cover getter **
-
 	public String getCoverURL(){
 		return this.coverURL ;
 	}
-
 }

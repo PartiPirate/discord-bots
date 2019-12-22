@@ -4,21 +4,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.Iterator;
 
-import org.json.JSONObject;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import fr.partipirate.discord.bots.congressus.Configuration;
-import fr.partipirate.discord.bots.congressus.commands.radio.MusicBrainzTrackInfo;
 
 public class RadioHelper {
 
@@ -62,28 +62,25 @@ public class RadioHelper {
 			JSONObject object = call(getUrl("do_getNext"));
 
 			return object;
-		} 
-		catch (Exception e) {
+		} catch (Exception e) {
 		}
 
 		return null;
 	}
 
 	public static boolean deleteTrack(String trackUrl) {
-		try {
-			Properties parameters = new Properties();
-			parameters.setProperty("url", trackUrl);
-
-			JSONObject object = call(getUrl("do_deleteTrack", parameters));
-
-			if (object.has("status")) {
-				return object.getBoolean("status");
-			}
-		} 
-		catch (Exception e) {
-		}
-
 		return true;
+		/*
+		 * try { Properties parameters = new Properties(); parameters.setProperty("url",
+		 * trackUrl);
+		 * 
+		 * JSONObject object = call(getUrl("do_deleteTrack", parameters));
+		 * 
+		 * if (object.has("status")) { return object.getBoolean("status"); } } catch
+		 * (Exception e) { }
+		 * 
+		 * return true;
+		 */
 	}
 
 	public static boolean addTrack(AudioTrack track) {
@@ -95,12 +92,11 @@ public class RadioHelper {
 			parameters.setProperty("duration", String.valueOf(track.getInfo().length / 1000));
 
 			JSONObject object = call(getUrl("do_addTrack", parameters));
-			
+
 			if (object.has("status")) {
 				return object.getBoolean("status");
 			}
-		} 
-		catch (Exception e) {
+		} catch (Exception e) {
 		}
 
 		return true;
@@ -116,207 +112,205 @@ public class RadioHelper {
 			if (object.has("status")) {
 				return object.getBoolean("status");
 			}
-		} 
-		catch (Exception e) {
+		} catch (Exception e) {
 		}
 
 		return true;
 	}
 
-	public static MusicBrainzTrackInfo searchTrackInfo(String trackName, String artistName){
+	public static MusicBrainzTrackInfo searchTrackInfo(String trackName, String artistName) {
 
-		MusicBrainzTrackInfo mbTrackInfo = new MusicBrainzTrackInfo() ;
+		MusicBrainzTrackInfo mbTrackInfo = new MusicBrainzTrackInfo();
 
-		String searchQuery = trackName ;
+		String searchQuery = trackName;
 
-		searchQuery = searchQuery.toLowerCase() ;
-		searchQuery = searchQuery.replaceAll(" ", "+") ;
-		searchQuery = searchQuery.replaceAll("&", "%26") ;
-		
+		searchQuery = searchQuery.toLowerCase();
+		searchQuery = searchQuery.replaceAll(" ", "+");
+		searchQuery = searchQuery.replaceAll("&", "%26");
+
 		System.out.println("Search Query : " + searchQuery);
+		String searchURL = "https://musicbrainz.org/ws/2/recording?query=" + searchQuery + "&fmt=json";
+		System.out.println("Search Query url: " + searchURL);
 
-		String searchURL = "https://musicbrainz.org/ws/2/recording?query=" + searchQuery + "&fmt=json" ;
-		
-		JSONObject musicBrainsReply ;
-		
+		JSONObject musicBrainsReply;
+
 		try {
-
-			musicBrainsReply = call(searchURL) ;
-			
-		}
-		catch (Exception e) {
-			
-			return null ;
-			
+			musicBrainsReply = call(searchURL);
+		} catch (Exception e) {
+			return null;
 		}
 
 		if (musicBrainsReply.has("recordings")) {
+			JSONArray recordingsArray = musicBrainsReply.getJSONArray("recordings");
 
-			JSONArray recordingsArray = musicBrainsReply.getJSONArray("recordings") ;
-
-			boolean isFind = false ;
-			int recordingsArrayIndex = 0 ;
-
+			boolean isFind = false;
+			int recordingsArrayIndex = 0;
 
 			// Search artist name in the recording list.
-			while( !isFind && recordingsArrayIndex < recordingsArray.length()){
+			while (!isFind && recordingsArrayIndex < recordingsArray.length()) {
 
 				if (recordingsArray.getJSONObject(recordingsArrayIndex).has("artist-credit")) {
-					
-					JSONArray artistArray = recordingsArray.getJSONObject(recordingsArrayIndex).getJSONArray("artist-credit") ;
 
-					boolean haveArtist = false ;
-					int artistArrayIndex = 0 ;
-					
-					//System.out.println("Artist Length : " + artistArray.length());
-					
+					JSONArray artistArray = recordingsArray.getJSONObject(recordingsArrayIndex)
+							.getJSONArray("artist-credit");
+
+					boolean haveArtist = false;
+					int artistArrayIndex = 0;
+
+					// System.out.println("Artist Length : " + artistArray.length());
+
 					// Search artist name in artists list
-					while(!haveArtist && artistArrayIndex < artistArray.length()){
-												
-						JSONObject artistObject = artistArray.getJSONObject(artistArrayIndex) ;
+					while (!haveArtist && artistArrayIndex < artistArray.length()) {
 
-						if (artistObject.has("name") && artistObject.getString("name").equalsIgnoreCase(artistName)) {
-						 		
-						 		isFind = true ;
-						 		
-						 		haveArtist = true ;
+						JSONObject artistObject = artistArray.getJSONObject(artistArrayIndex);
 
-						 		if (artistObject.has("artist") && artistObject.getJSONObject("artist").has("id")) {
-
-						 			mbTrackInfo.setArtistID(artistObject.getJSONObject("artist").getString("id")) ;
-
-						 			mbTrackInfo.setArtistName(artistObject.getString("name")) ;
-
-						 			String artistURL = "https://musicbrainz.org/artist/" + mbTrackInfo.getArtistID() ;
-
-						 			mbTrackInfo.setArtistURL(artistURL) ;
-
-						 		}
-
+						if (artistObject.has("name")) {
+							System.out.println("Compare " + artistObject.getString("name") + " vs " + artistName);
 						}
 
-						artistArrayIndex++ ; 
+						if (artistObject.has("name") && artistObject.getString("name").equalsIgnoreCase(artistName)) {
+							isFind = true;
+							haveArtist = true;
+
+							if (artistObject.has("artist") && artistObject.getJSONObject("artist").has("id")) {
+								mbTrackInfo.setArtistID(artistObject.getJSONObject("artist").getString("id"));
+								mbTrackInfo.setArtistName(artistObject.getString("name"));
+								String artistURL = "https://musicbrainz.org/artist/" + mbTrackInfo.getArtistID();
+								mbTrackInfo.setArtistURL(artistURL);
+							}
+						}
+
+						artistArrayIndex++;
 					}
 
 					if (haveArtist) {
-
 						if (recordingsArray.getJSONObject(recordingsArrayIndex).has("releases")) {
-							JSONArray releasesArray = recordingsArray.getJSONObject(recordingsArrayIndex).getJSONArray("releases") ;
+							JSONArray releasesArray = recordingsArray.getJSONObject(recordingsArrayIndex)
+									.getJSONArray("releases");
 
 							if (releasesArray.length() > 0) {
-								
-								JSONObject releaseObject = releasesArray.getJSONObject(0) ;
+								JSONObject releaseObject = releasesArray.getJSONObject(0);
 
 								if (releaseObject.has("id")) {
-									mbTrackInfo.setReleaseID(releaseObject.getString("id")) ;
+									mbTrackInfo.setReleaseID(releaseObject.getString("id"));
 								}
 
 								if (releaseObject.has("title")) {
-									mbTrackInfo.setReleaseName(releaseObject.getString("title")) ;
-									
+									mbTrackInfo.setReleaseName(releaseObject.getString("title"));
 								}
-
 							}
 						}
 
 						if (recordingsArray.getJSONObject(recordingsArrayIndex).has("id")) {
-
-							mbTrackInfo.setRecordingID(recordingsArray.getJSONObject(recordingsArrayIndex).getString("id")) ;
-
-							String artistURL = "https://musicbrainz.org/recording/" + mbTrackInfo.getRecordingID() ;
-
-						 	mbTrackInfo.setRecordingURL(artistURL) ;
+							mbTrackInfo.setRecordingID(
+									recordingsArray.getJSONObject(recordingsArrayIndex).getString("id"));
+							String artistURL = "https://musicbrainz.org/recording/" + mbTrackInfo.getRecordingID();
+							mbTrackInfo.setRecordingURL(artistURL);
 
 						}
 
 						if (recordingsArray.getJSONObject(recordingsArrayIndex).has("title")) {
-
-							mbTrackInfo.setRecordingName(recordingsArray.getJSONObject(recordingsArrayIndex).getString("title")) ;
-
+							mbTrackInfo.setRecordingName(
+									recordingsArray.getJSONObject(recordingsArrayIndex).getString("title"));
 						}
 
-						String coverURL = getCoverURLInCoverArtArchive(mbTrackInfo.getReleaseID()) ;
+						System.out.println("Release ID : " + mbTrackInfo.getReleaseID());
+						String coverURL = getCoverURLInCoverArtArchive(mbTrackInfo.getReleaseID());
+						System.out.println("Cover url : " + coverURL);
 
-						mbTrackInfo.setCoverURL(coverURL) ;
+						try {
+							String imageRedirection = getFinalUrl(coverURL);
+							System.out.println(imageRedirection);
+							coverURL = imageRedirection;
+						}
+						catch (IOException e) {
+						}
 
-						return mbTrackInfo ;
-						
+						mbTrackInfo.setCoverURL(coverURL);
+
+						return mbTrackInfo;
 					}
-
 				}
 
-
-				recordingsArrayIndex++ ;
+				recordingsArrayIndex++;
 			}
-
 		}
 
-		return null ;
-
+		return null;
 	}
 
-	private static String getCoverURLInCoverArtArchive(String id){
+	private static String getCoverURLInCoverArtArchive(String id) {
 
-		String searchURL = "https://ia801900.us.archive.org/13/items/mbid-" + id + "/index.json" ;
-		
-		JSONObject coverArchiveReply ;
-		
+		String searchURL = "https://ia801900.us.archive.org/13/items/mbid-" + id + "/index.json";
+//		String searchURL = "https://archive.org/download/mbid-" + id + "/index.json";
+
+		System.out.println("Search Query url: " + searchURL);
+
+		JSONObject coverArchiveReply;
+
 		try {
-
-			coverArchiveReply = call(searchURL) ;
-			
-		}
-		catch (Exception e) {
-			
-			return null ;
-			
+			coverArchiveReply = call(searchURL);
+		} catch (Exception e) {
+			return null;
 		}
 
 		if (coverArchiveReply.has("images")) {
 
-			JSONArray imagesArray = coverArchiveReply.getJSONArray("images") ;
+			JSONArray imagesArray = coverArchiveReply.getJSONArray("images");
 
 			if (imagesArray.length() > 0) {
-
-				JSONObject imageObject = imagesArray.getJSONObject(0) ;
+				JSONObject imageObject = imagesArray.getJSONObject(0);
 
 				if (imageObject.has("thumbnails")) {
-
 					if (imageObject.getJSONObject("thumbnails").has("small")) {
-
-						return imageObject.getJSONObject("thumbnails").getString("small") ;
-
-					}
-					else{
-
-						Iterator<String> keyList = imageObject.getJSONObject("thumbnails").keys() ;
+						return imageObject.getJSONObject("thumbnails").getString("small");
+					} else {
+						Iterator<String> keyList = imageObject.getJSONObject("thumbnails").keys();
 
 						if (keyList.hasNext()) {
-
-							return imageObject.getJSONObject("thumbnails").getString(keyList.next()) ;
-							
+							return imageObject.getJSONObject("thumbnails").getString(keyList.next());
 						}
-
 					}
-					
 				}
 				if (imageObject.has("image")) {
-
-					return imageObject.getString("image") ;
-
+					String imageUrl = imageObject.getString("image");
+					
+					return imageUrl;
 				}
-				
 			}
-			
 		}
 
-	return null ;
-	
+		return null;
 	}
 
-	private static JSONObject call(String apiCallUrl) throws IOException {
-		URL url = new URL(apiCallUrl);
+	private static String getFinalUrl(String contentUrl) throws IOException {
+		URL url = new URL(contentUrl);
 		URLConnection connection = url.openConnection();
+
+		((HttpURLConnection)connection).getHeaderFields();
+
+		return ((HttpURLConnection)connection).getURL().toString();
+	}
+	
+	private static String getContent(String contentUrl) throws IOException {
+		URL url = new URL(contentUrl);
+		URLConnection connection = url.openConnection();
+
+/*		
+//		((HttpURLConnection)connection).setInstanceFollowRedirects(false);
+
+		Map<String, List<String>> fields = ((HttpURLConnection)connection).getHeaderFields();
+		for (String key : fields.keySet()) {
+			System.out.print(key);
+			System.out.print(" => ");
+			System.out.println(fields.get(key));
+		}
+		
+		System.out.println(((HttpURLConnection)connection).getResponseCode());
+		System.out.println(((HttpURLConnection)connection).getResponseMessage());
+		System.out.println(((HttpURLConnection)connection).getURL());
+*/
+
 		InputStreamReader sr = new InputStreamReader(connection.getInputStream());
 		StringWriter sw = new StringWriter();
 
@@ -330,11 +324,14 @@ public class RadioHelper {
 		sr.close();
 		sw.close();
 
-		String json = sw.toString();
-
-		JSONObject object = (JSONObject) new JSONTokener(json).nextValue();
-		
-		return object;
+		return sw.toString();
 	}
 	
+	private static JSONObject call(String apiCallUrl) throws IOException {
+		String json = getContent(apiCallUrl);
+
+		JSONObject object = (JSONObject) new JSONTokener(json).nextValue();
+
+		return object;
+	}
 }
