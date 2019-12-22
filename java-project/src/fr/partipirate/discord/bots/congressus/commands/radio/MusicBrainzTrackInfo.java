@@ -65,7 +65,11 @@ public class MusicBrainzTrackInfo {
 	}
 
 	// *** GETTERS ***
-
+	
+	public String getRecordingName(){
+		return this.recordingName ;
+	}
+	
 	// Recording ID getter
 	public String getRecordingID(){
 		return this.recordingID ;
