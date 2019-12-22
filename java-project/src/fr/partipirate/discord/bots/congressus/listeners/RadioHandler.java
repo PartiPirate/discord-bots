@@ -46,7 +46,10 @@ public class RadioHandler extends ListenerAdapter {
 			System.out.println("Show no title");
 //			this.congressusBot.getJDA().getPresence().setGame(Game.of(GameType.DEFAULT, null));
 		} else {
-			this.congressusBot.getJDA().getPresence().setGame(Game.of(GameType.LISTENING, track.getInfo().title));
+
+			String musicInfo = track.getInfo().title + " - " + track.getInfo().author ;
+
+			this.congressusBot.getJDA().getPresence().setGame(Game.of(GameType.LISTENING, musicInfo));
 			System.out.println("Show " + track.getInfo().title);
 			System.out.println("Duration : " + getTimestamp(track.getInfo().length));
 		}

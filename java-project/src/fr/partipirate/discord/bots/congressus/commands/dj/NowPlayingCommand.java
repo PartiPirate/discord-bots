@@ -7,6 +7,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import fr.partipirate.discord.bots.congressus.CongressusBot;
 import fr.partipirate.discord.bots.congressus.commands.ICommand;
+import fr.partipirate.discord.bots.congressus.commands.radio.MusicBrainzTrackInfo;
+import fr.partipirate.discord.bots.congressus.commands.radio.RadioHelper;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -53,17 +55,45 @@ public class NowPlayingCommand extends ADJCommand implements ICommand {
 
             // Create the EmbedBuilder instance
             EmbedBuilder eb = new EmbedBuilder();
+            
+            eb.setColor(new Color(0x41D55F));
+            
+            MusicBrainzTrackInfo trackInfo = RadioHelper.searchTrackInfo(track.getInfo().title, track.getInfo().author) ;
+            
+            if(trackInfo == null) {
+            	
+            	eb.setTitle(track.getInfo().title) ;
+    			eb.setAuthor(track.getInfo().author) ;
+    			
+            }
+            else {
+            	
+            	if (trackInfo.getRecordingName() == null) {
+            		eb.setTitle(track.getInfo().title) ;
+            	}
+            	else {
+            		eb.setTitle(trackInfo.getRecordingName()) ;
+            	}
+            	
+            	if (trackInfo.getArtistName() == null) {
+            		eb.setTitle(track.getInfo().title) ;
+            	}
+            	else {
+            		eb.setTitle(trackInfo.getArtistName()) ;
+            	}
+            	
+            	if (trackInfo.getCoverURL() != null) {
+            		eb.setImage(trackInfo.getCoverURL()) ;
+            	}
+            	
+            	
+            }
 
-			eb.setTitle(track.getInfo().title);
-
-			eb.setColor(new Color(0x41D55F));
-
-			eb.setAuthor(track.getInfo().author) ;
 
 			long timeDuration = track.getDuration() ;
 			long timePosition = track.getPosition() ;
 				
-			eb.addField("", getTimestamp(timePosition) + " / " + getTimestamp(timeDuration), false);
+			eb.addField("", getTimestamp(timePosition) + " / " + getTimestamp(timeDuration), true);
 				
 			channel.sendMessage(eb.build()).complete();
         }
