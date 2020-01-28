@@ -8,17 +8,22 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Properties;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import fr.partipirate.discord.bots.congressus.Configuration;
+import fr.partipirate.discord.bots.congressus.commands.radio.MusicBrainzTrackInfo;
 
 public class RadioHelper {
 
@@ -119,17 +124,25 @@ public class RadioHelper {
 	}
 
 	public static MusicBrainzTrackInfo searchTrackInfo(String trackName, String artistName) {
+		
+		MusicBrainzTrackInfo mbTrackInfo = new MusicBrainzTrackInfo() ;
+		
+		String formatedTrackName = trackName ;
 
-		MusicBrainzTrackInfo mbTrackInfo = new MusicBrainzTrackInfo();
-
-		String searchQuery = trackName;
-
-		searchQuery = searchQuery.toLowerCase();
-		searchQuery = searchQuery.replaceAll(" ", "+");
-		searchQuery = searchQuery.replaceAll("&", "%26");
-
-		System.out.println("Search Query : " + searchQuery);
+		formatedTrackName = formatedTrackName.toLowerCase() ;
+		formatedTrackName = formatedTrackName.replaceAll(" ", "+") ;
+		formatedTrackName = formatedTrackName.replaceAll("&", "%26") ;
+		
+		String formatedArtistName = artistName ;
+		
+		formatedArtistName = formatedArtistName.toLowerCase() ;
+		formatedArtistName = formatedArtistName.replaceAll(" ", "+") ;
+		formatedArtistName = formatedArtistName.replaceAll("&", "%26") ;
+		
+		String searchQuery = formatedTrackName + "+AND+artist:" + formatedArtistName ;
 		String searchURL = "https://musicbrainz.org/ws/2/recording?query=" + searchQuery + "&fmt=json";
+		
+		System.out.println("Search Query : " + searchQuery);
 		System.out.println("Search Query url: " + searchURL);
 
 		JSONObject musicBrainsReply;
@@ -164,9 +177,11 @@ public class RadioHelper {
 
 						JSONObject artistObject = artistArray.getJSONObject(artistArrayIndex);
 
+						/*
 						if (artistObject.has("name")) {
 							System.out.println("Compare " + artistObject.getString("name") + " vs " + artistName);
 						}
+						*/
 
 						if (artistObject.has("name") && artistObject.getString("name").equalsIgnoreCase(artistName)) {
 							isFind = true;
@@ -189,8 +204,58 @@ public class RadioHelper {
 									.getJSONArray("releases");
 
 							if (releasesArray.length() > 0) {
-								JSONObject releaseObject = releasesArray.getJSONObject(0);
-
+								
+								Date minDate = null ;
+								int minDateIndex = 0 ;
+								
+								
+								for(int releaseIndex = 0 ; releaseIndex < releasesArray.length() ; releaseIndex++) {
+									
+									JSONObject tempReleaseObject = releasesArray.getJSONObject(releaseIndex);
+									Date releaseDate ;
+									
+									if (tempReleaseObject.has("date")) {
+										System.out.println(releaseIndex+" Release date : "+tempReleaseObject.getString("date"));
+										
+										try {
+											
+											String dateString = tempReleaseObject.getString("date") ;
+											
+											System.out.println("Date string size : "+dateString.length()) ;
+											
+											if (dateString.length() == 10) {
+												releaseDate = new SimpleDateFormat("yyyy-MM-dd").parse(tempReleaseObject.getString("date"));
+											}
+											else if (dateString.length() == 4) {
+												releaseDate = new SimpleDateFormat("yyyy").parse(tempReleaseObject.getString("date"));
+											}
+											else {
+												releaseDate = null ;
+											}
+											
+											
+										} catch (JSONException | ParseException e) {
+											// TODO Auto-generated catch block
+											releaseDate = null ;
+											System.out.println("Date Parse ERROR") ;
+										}
+										
+										if (minDate == null && releaseDate != null) {
+											minDate = releaseDate ;
+											minDateIndex = releaseIndex ;
+										}
+										else if(releaseDate != null && releaseDate.before(minDate)) {
+											minDate = releaseDate ;
+											minDateIndex = releaseIndex ;
+										}
+									}
+								}
+								
+								System.out.println("Min Date : "+minDate);
+								
+								JSONObject releaseObject = releasesArray.getJSONObject(minDateIndex); ;
+								
+								
 								if (releaseObject.has("id")) {
 									mbTrackInfo.setReleaseID(releaseObject.getString("id"));
 								}

@@ -50,8 +50,10 @@ public class NowPlayingCommand extends ADJCommand implements ICommand {
         	channel.sendMessage("Aucune musique ").complete();
         } 
         else {
+        	
+        	//channel.sendMessage("*recherche en cours ...*").complete();
 
-            AudioTrack track = getPlayer(guild).getPlayingTrack();
+            AudioTrack track = getPlayer(guild).getPlayingTrack() ;
 
             // Create the EmbedBuilder instance
             EmbedBuilder eb = new EmbedBuilder();
@@ -69,14 +71,24 @@ public class NowPlayingCommand extends ADJCommand implements ICommand {
             		eb.setTitle(track.getInfo().title);
             	}
             	else {
-            		eb.setTitle(trackInfo.getRecordingName());
+            		if (trackInfo.getRecordingURL() == null) {
+            			eb.setTitle(trackInfo.getRecordingName());
+            		}
+            		else {
+            			eb.setTitle(trackInfo.getRecordingName(), trackInfo.getRecordingURL());
+            		}
             	}
             	
             	if (trackInfo.getArtistName() == null) {
             		eb.setAuthor(track.getInfo().title);
             	}
             	else {
-            		eb.setAuthor(trackInfo.getArtistName());
+            		if (trackInfo.getArtistURL() == null) {
+            			eb.setAuthor(trackInfo.getArtistName());
+            		}
+            		else {
+            			eb.setAuthor(trackInfo.getArtistName(), trackInfo.getArtistURL());
+            		}
             	}
 
             	if (trackInfo.getReleaseName() != null) {
@@ -98,6 +110,7 @@ public class NowPlayingCommand extends ADJCommand implements ICommand {
 			eb.setFooter("\u23f1\ufe0f " + getTimestamp(timePosition) + " / " + getTimestamp(timeDuration), null);
 			
 			channel.sendMessage(eb.build()).complete();
+			
         }
 	}
 
