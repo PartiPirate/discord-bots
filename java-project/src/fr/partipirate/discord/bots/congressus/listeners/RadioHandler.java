@@ -148,6 +148,7 @@ public class RadioHandler extends ListenerAdapter {
 					firstTrack = playlist.getTracks().get(0);
 				}
 
+				manager.scheduler.clear();
 				manager.scheduler.queue(firstTrack);
 			}
 			
