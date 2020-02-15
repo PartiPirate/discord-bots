@@ -131,11 +131,11 @@ public class NextMeetingCommand extends ACongressusCommand implements ICommand {
 				eb.setColor(new Color(0xF40C0C));
 				
 //				eb.setDescription("Text");
-				eb.addField("Horaire", StringEscapeUtils.escapeHtml4(minMeeting.getString("meetingDatetime")), false);
-				eb.addField("Lieu", StringEscapeUtils.escapeHtml4(minMeeting.getJSONObject("location").getString("type")), false);
+				eb.addField("Horaire", StringEscapeUtils.unescapeHtml4(minMeeting.getString("meetingDatetime")), false);
+				eb.addField("Lieu", StringEscapeUtils.unescapeHtml4(minMeeting.getJSONObject("location").getString("type")), false);
 				if (minMeeting.getJSONObject("location").has("discord")) {
-					eb.addField(":hash:", StringEscapeUtils.escapeHtml4(minMeeting.getJSONObject("location").getJSONObject("discord").getJSONObject("text").getString("title")), true);
-					eb.addField(":sound:", StringEscapeUtils.escapeHtml4(minMeeting.getJSONObject("location").getJSONObject("discord").getJSONObject("vocal").getString("title")), true);
+					eb.addField(":hash:", StringEscapeUtils.unescapeHtml4(minMeeting.getJSONObject("location").getJSONObject("discord").getJSONObject("text").getString("title")), true);
+					eb.addField(":sound:", StringEscapeUtils.unescapeHtml4(minMeeting.getJSONObject("location").getJSONObject("discord").getJSONObject("vocal").getString("title")), true);
 				}
 				
 				channel.sendMessage(eb.build()).complete();
