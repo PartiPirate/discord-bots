@@ -104,6 +104,9 @@ public class RadioHandler extends ListenerAdapter {
 	}
 
 	private void getNext(GuildMusicManager manager) {
+		// If there are some items, it's not necessary to ask for some new item
+		if (manager.scheduler.getNumberOfTracks() > 0) return;
+
 		try {
 			JSONObject object = RadioHelper.getNext();
 			
