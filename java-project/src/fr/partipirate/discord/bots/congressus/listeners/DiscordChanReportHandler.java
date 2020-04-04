@@ -3,10 +3,9 @@ package fr.partipirate.discord.bots.congressus.listeners;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -93,12 +92,12 @@ public class DiscordChanReportHandler extends ListenerAdapter {
 		urlBuilder.append("&secret=");
 		urlBuilder.append(Configuration.getInstance().OPTIONS.get("congressus").get("secret"));
 
-		HttpsURLConnection httpClient = null;
+		HttpURLConnection httpClient = null;
 
 		try {
-	        httpClient = (HttpsURLConnection) new URL(urlBuilder.toString()).openConnection();
+	        httpClient = (HttpURLConnection) new URL(urlBuilder.toString()).openConnection();
 
-	        //add reuqest header
+	        //add request header
 	        httpClient.setRequestMethod("POST");
 	        httpClient.setRequestProperty("User-Agent", "Java client");
 	        httpClient.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -108,9 +107,9 @@ public class DiscordChanReportHandler extends ListenerAdapter {
 	        String urlParameters = "data=" + channelsArray.toString();
 	        byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
 
-	        DataOutputStream wr = new DataOutputStream(httpClient.getOutputStream());
-            wr.write(postData);
-            wr.flush();
+	        DataOutputStream dos = new DataOutputStream(httpClient.getOutputStream());
+            dos.write(postData);
+            dos.flush();
             
             int responseCode = httpClient.getResponseCode();
 /*
@@ -118,12 +117,12 @@ public class DiscordChanReportHandler extends ListenerAdapter {
             System.out.println("Post parameters : " + urlParameters);
             System.out.println("Response Code : " + responseCode);
 */
-            BufferedReader in = new BufferedReader(new InputStreamReader(httpClient.getInputStream()));
+            BufferedReader br = new BufferedReader(new InputStreamReader(httpClient.getInputStream()));
 
             String line;
             StringBuilder response = new StringBuilder();
 
-            while ((line = in.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 response.append(line);
             }
 /*
