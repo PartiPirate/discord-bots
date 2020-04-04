@@ -45,7 +45,8 @@ public class RadioHandler extends ListenerAdapter {
 			this.congressusBot.getJDA().getPresence().setGame(null);
 			System.out.println("Show no title");
 //			this.congressusBot.getJDA().getPresence().setGame(Game.of(GameType.DEFAULT, null));
-		} else {
+		} 
+		else {
 
 			String musicInfo = track.getInfo().title + " - " + track.getInfo().author ;
 
@@ -87,7 +88,8 @@ public class RadioHandler extends ListenerAdapter {
 			if (track == null) {
 				System.out.println("Aucune musique");
 				getNext(manager);
-			} else {
+			} 
+			else {
 				TrackOptions trackOptions = this.trackOptions.get(track.getInfo().uri);
 				long trackLength = (trackOptions != null && trackOptions.finishTime != null) ? Math.round(trackOptions.finishTime * 1000) : track.getInfo().length; 
 
@@ -95,7 +97,8 @@ public class RadioHandler extends ListenerAdapter {
 //					System.out.println("Reste moins de 10s : " + getTimestamp(track.getPosition()) + " / "
 //							+ getTimestamp(track.getInfo().length));
 					getNext(manager);
-				} else {
+				} 
+				else {
 //					System.out.println("Ca joue : " + getTimestamp(track.getPosition()) + " / "
 //							+ getTimestamp(track.getInfo().length));
 				}
@@ -131,7 +134,8 @@ public class RadioHandler extends ListenerAdapter {
 			if (object.has("durationOfTracks")) {
 //				System.out.println("Durations of tracks : " + getTimestamp(object.getInt("durationOfTracks") * 1000L));
 			}
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

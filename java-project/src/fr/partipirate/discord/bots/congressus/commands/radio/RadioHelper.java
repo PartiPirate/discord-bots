@@ -74,18 +74,21 @@ public class RadioHelper {
 	}
 
 	public static boolean deleteTrack(String trackUrl) {
+//		return true;
+		
+		try { 
+			Properties parameters = new Properties(); parameters.setProperty("url", trackUrl);
+
+			JSONObject object = call(getUrl("do_deleteTrack", parameters));
+
+			if (object.has("status")) { 
+				return object.getBoolean("status"); 
+			} 
+		} 
+		catch (Exception e) {
+		}
+		
 		return true;
-		/*
-		 * try { Properties parameters = new Properties(); parameters.setProperty("url",
-		 * trackUrl);
-		 * 
-		 * JSONObject object = call(getUrl("do_deleteTrack", parameters));
-		 * 
-		 * if (object.has("status")) { return object.getBoolean("status"); } } catch
-		 * (Exception e) { }
-		 * 
-		 * return true;
-		 */
 	}
 
 	public static boolean addTrack(AudioTrack track) {
@@ -101,7 +104,8 @@ public class RadioHelper {
 			if (object.has("status")) {
 				return object.getBoolean("status");
 			}
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 		}
 
 		return true;
@@ -117,7 +121,8 @@ public class RadioHelper {
 			if (object.has("status")) {
 				return object.getBoolean("status");
 			}
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 		}
 
 		return true;
@@ -149,7 +154,8 @@ public class RadioHelper {
 
 		try {
 			musicBrainsReply = call(searchURL);
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			return null;
 		}
 
@@ -315,7 +321,8 @@ public class RadioHelper {
 
 		try {
 			coverArchiveReply = call(searchURL);
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			return null;
 		}
 
@@ -329,7 +336,8 @@ public class RadioHelper {
 				if (imageObject.has("thumbnails")) {
 					if (imageObject.getJSONObject("thumbnails").has("small")) {
 						return imageObject.getJSONObject("thumbnails").getString("small");
-					} else {
+					} 
+					else {
 						Iterator<String> keyList = imageObject.getJSONObject("thumbnails").keys();
 
 						if (keyList.hasNext()) {
