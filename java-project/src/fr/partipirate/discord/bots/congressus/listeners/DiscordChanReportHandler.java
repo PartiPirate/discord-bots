@@ -11,6 +11,7 @@ import javax.net.ssl.HttpsURLConnection;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import fr.partipirate.discord.bots.congressus.Configuration;
 import fr.partipirate.discord.bots.congressus.commands.congressus.CongressusHelper;
 import net.dv8tion.jda.core.entities.Channel;
 import net.dv8tion.jda.core.entities.ChannelType;
@@ -81,13 +82,22 @@ public class DiscordChanReportHandler extends ListenerAdapter {
 			
 			channelsArray.put(channelObject);
 		}
-		
-		String url = CongressusHelper.getUrl("do_updateChannels");
+
+		StringBuilder urlBuilder = new StringBuilder();
+		urlBuilder.append(CongressusHelper.getUrl());
+		urlBuilder.append("meeting_api.php?method=do_updateChannels");
+
+		urlBuilder.append("&token=");
+		urlBuilder.append(Configuration.getInstance().OPTIONS.get("congressus").get("token"));
+
+		urlBuilder.append("&secret=");
+		urlBuilder.append(Configuration.getInstance().OPTIONS.get("congressus").get("secret"));
+
 		HttpsURLConnection httpClient = null;
-		
+
 		try {
-	        httpClient = (HttpsURLConnection) new URL(url).openConnection();
-	
+	        httpClient = (HttpsURLConnection) new URL(urlBuilder.toString()).openConnection();
+
 	        //add reuqest header
 	        httpClient.setRequestMethod("POST");
 	        httpClient.setRequestProperty("User-Agent", "Java client");
