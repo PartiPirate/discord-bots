@@ -8,6 +8,7 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
+import fr.partipirate.discord.bots.congressus.Configuration;
 import fr.partipirate.discord.bots.congressus.CongressusBot;
 import fr.partipirate.discord.bots.congressus.GuildMusicManager;
 import net.dv8tion.jda.core.audio.AudioReceiveHandler;
@@ -102,7 +103,10 @@ public class RecorderHandler extends ListenerAdapter {
 	}
 
 	private void getNext(GuildMusicManager manager) {
-		loadUrl(manager, "https://www.youtube.com/watch?v=g4mHPeMGTJM");
+		String silenceUrl = Configuration.getInstance().OPTIONS.get("recorder").get("silence");
+		
+//		loadUrl(manager, "https://www.youtube.com/watch?v=g4mHPeMGTJM");
+		loadUrl(manager, silenceUrl);
 //		congressusBot.setVolume(1);
 	}
 
