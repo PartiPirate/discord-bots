@@ -106,7 +106,7 @@ public class RecorderHandler extends ListenerAdapter {
 		String silenceUrl = Configuration.getInstance().OPTIONS.get("recorder").get("silence");
 		
 //		loadUrl(manager, "https://www.youtube.com/watch?v=g4mHPeMGTJM");
-		loadUrl(manager, silenceUrl);
+//		loadUrl(manager, silenceUrl);
 //		congressusBot.setVolume(1);
 	}
 

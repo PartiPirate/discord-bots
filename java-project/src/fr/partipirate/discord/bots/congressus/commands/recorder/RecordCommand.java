@@ -47,6 +47,7 @@ public class RecordCommand extends ARecorderCommand implements ICommand {
 			System.out.println("Connect on " + voicedChannel.getName());
 			
 			AudioRecorderHandler recorder = new AudioRecorderHandler(voicedChannel);
+			recorder.setCommandChannel(channel);
 
 			if (guild.getAudioManager().getReceiveHandler() != null) {
 				AudioReceiveHandler previousHandler = guild.getAudioManager().getReceiveHandler();
@@ -58,8 +59,6 @@ public class RecordCommand extends ARecorderCommand implements ICommand {
 			guild.getAudioManager().setReceivingHandler(recorder);
 
 			recorder.startRecording();
-			
-			channel.sendMessage("*L'enregistrement commence sur **" + voicedChannel.getName() + "***").complete();
 		}
 	}
 

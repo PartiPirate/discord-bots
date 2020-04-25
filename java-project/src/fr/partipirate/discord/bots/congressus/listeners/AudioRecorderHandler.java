@@ -15,6 +15,7 @@ import net.dv8tion.jda.core.audio.AudioReceiveHandler;
 import net.dv8tion.jda.core.audio.CombinedAudio;
 import net.dv8tion.jda.core.audio.UserAudio;
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 
@@ -27,8 +28,9 @@ public class AudioRecorderHandler implements AudioReceiveHandler {
 	private FileOutputStream fis = null;
 	private Map<String, FileOutputStream> userFileOutputStreams = null;
 	private String filename = null;
-	private VoiceChannel voicedChannel;
 	private long numberOfCycles;
+	private VoiceChannel voicedChannel;
+	private MessageChannel commandChannel = null;
 
 	public AudioRecorderHandler(VoiceChannel voicedChannel) {
 		this.voicedChannel = voicedChannel;
@@ -116,6 +118,11 @@ public class AudioRecorderHandler implements AudioReceiveHandler {
 			e.printStackTrace();
 		}
 
+		if (commandChannel != null) {
+			commandChannel.sendMessage("*L'enregistrement commence sur **" + voicedChannel.getName() + "***").complete();
+			commandChannel = null;
+		}
+		
 //		System.out.println(voicedChannel.getMembers());
 		for(String filename : userFileOutputStreams.keySet()) {
 			boolean foundUser = false;
@@ -187,5 +194,9 @@ public class AudioRecorderHandler implements AudioReceiveHandler {
 	
 	public VoiceChannel getVoiceChannel() {
 		return this.voicedChannel;
+	}
+
+	public void setCommandChannel(MessageChannel channel) {
+		this.commandChannel = channel;
 	}
 }
