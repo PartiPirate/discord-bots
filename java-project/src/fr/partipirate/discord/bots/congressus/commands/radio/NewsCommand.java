@@ -64,14 +64,14 @@ public class NewsCommand extends ADJCommand implements ICommand {
 		else if (!isDJ(getMember(user, guild))) {
 			channel.sendMessage("*Vous n'avez pas les droits suffisants*").complete();
 		}
-		else if (commandParts.length != 2) {
+		else if (commandParts.length != 3) {
 			channel.sendMessage("*Le nombre de paramètres est inadéquat*").complete();
 		} 
 		else {
-			newsUrl = commandParts[1];
+			newsUrl = commandParts[2];
 
 			Calendar calendar = Calendar.getInstance();
-			String date = commandParts[0];
+			String date = commandParts[1];
 			String[] dateParts = date.split("-");
 
 			calendar.set(Integer.parseInt(dateParts[0]), Integer.parseInt(dateParts[1]), Integer.parseInt(dateParts[2]));
