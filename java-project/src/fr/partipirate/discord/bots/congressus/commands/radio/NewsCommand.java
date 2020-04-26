@@ -37,7 +37,7 @@ public class NewsCommand extends ADJCommand implements ICommand {
 
 	@Override
 	public void doCommand(User user, MessageChannel channel, Guild guild, String[] commandParts) {
-		if (commandParts.length == 0) {
+		if (commandParts.length == 1) {
 			if (newsUrl == null) {
 				channel.sendMessage("*Pas de nouvelles à jouer*").complete();
 			}
