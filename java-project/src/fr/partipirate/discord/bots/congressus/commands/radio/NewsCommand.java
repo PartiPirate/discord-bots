@@ -74,7 +74,7 @@ public class NewsCommand extends ADJCommand implements ICommand {
 			String date = commandParts[1];
 			String[] dateParts = date.split("-");
 
-			calendar.set(Integer.parseInt(dateParts[0]), Integer.parseInt(dateParts[1]), Integer.parseInt(dateParts[2]));
+			calendar.set(Integer.parseInt(dateParts[0]), Integer.parseInt(dateParts[1]) - 1, Integer.parseInt(dateParts[2]));
 
 			newsUntil = calendar.getTimeInMillis();
 
