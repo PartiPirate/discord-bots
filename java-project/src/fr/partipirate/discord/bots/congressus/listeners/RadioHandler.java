@@ -140,7 +140,7 @@ public class RadioHandler extends ListenerAdapter {
 		}
 	}
 
-	private void loadUrl(GuildMusicManager manager, String trackUrl) {
+	public void loadUrl(GuildMusicManager manager, String trackUrl) {
 		congressusBot.getPlayerManager().loadItemOrdered(manager, trackUrl, new AudioLoadResultHandler() {
 			@Override
 			public void trackLoaded(AudioTrack track) {
