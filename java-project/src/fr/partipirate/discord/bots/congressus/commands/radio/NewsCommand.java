@@ -77,6 +77,8 @@ public class NewsCommand extends ADJCommand implements ICommand {
 			calendar.set(Integer.parseInt(dateParts[0]), Integer.parseInt(dateParts[1]), Integer.parseInt(dateParts[2]));
 
 			newsUntil = calendar.getTimeInMillis();
+
+			channel.sendMessage("*Les nouvelles sont jouables jusqu'au " + calendar.getTime() + "*").complete();
 		}
 	}
 
