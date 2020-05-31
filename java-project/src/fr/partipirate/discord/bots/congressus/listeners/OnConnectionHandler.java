@@ -145,7 +145,7 @@ public class OnConnectionHandler extends ListenerAdapter {
 		
 		for (String group : groups) {
 			System.out.println("Search role for : " + group);
-			
+
 			if (group.length() > 32) {
 				group = group.substring(0, 32);
 				System.out.println("Search role (reduce) for : " + group);
@@ -165,7 +165,7 @@ public class OnConnectionHandler extends ListenerAdapter {
 				role = controller.createRole().complete();
 				role.getManager().setName(group).complete();
 			}
-			
+
 			controller.addSingleRoleToMember(member, role).complete();
 			System.out.println("Add role : " + role);
 		}
