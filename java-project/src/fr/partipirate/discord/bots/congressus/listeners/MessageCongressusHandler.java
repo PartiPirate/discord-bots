@@ -127,15 +127,21 @@ public class MessageCongressusHandler extends ListenerAdapter {
 
 		System.out.println(action + "-" + type);
 
-		switch(action + "-" + type) {
-			case "create-message":
-				return createMessage(message);
-			case "create-role":
-				return createRole(message);
-			case "addinchannel-role":
-				return addRoleInChannel(message);
-			case "create-channel":
-				return createChannel(message);
+		try {
+			switch(action + "-" + type) {
+				case "create-message":
+					return createMessage(message);
+				case "create-role":
+					return createRole(message);
+				case "addinchannel-role":
+					return addRoleInChannel(message);
+				case "create-channel":
+					return createChannel(message);
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return true;
 		}
 
 		return false;
