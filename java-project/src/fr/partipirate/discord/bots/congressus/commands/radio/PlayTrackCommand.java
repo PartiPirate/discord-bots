@@ -24,7 +24,7 @@ public class PlayTrackCommand extends ADJCommand implements ICommand {
 	
 	@Override
 	public String getKeyWord() {
-		return "jingle";
+		return "playtrack";
 	}
 
 	@Override
@@ -59,6 +59,6 @@ public class PlayTrackCommand extends ADJCommand implements ICommand {
 	
 	@Override
 	public String getCommandHelp() {
-		return "Joue un jingle [id]";
+		return "Joue une track précise [id]";
 	}
 }
