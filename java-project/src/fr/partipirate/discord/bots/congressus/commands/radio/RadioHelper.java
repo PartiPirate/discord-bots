@@ -73,6 +73,18 @@ public class RadioHelper {
 		return null;
 	}
 
+	public static JSONObject getJingle(String id) {
+		try {
+			Properties parameters = new Properties(); parameters.setProperty("id", id);
+			JSONObject object = call(getUrl("do_getJingle", parameters));
+
+			return object;
+		} catch (Exception e) {
+		}
+
+		return null;
+	}
+
 	public static boolean deleteTrack(String trackUrl) {
 //		return true;
 		

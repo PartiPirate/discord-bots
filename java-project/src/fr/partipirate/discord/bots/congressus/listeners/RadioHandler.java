@@ -105,6 +105,37 @@ public class RadioHandler extends ListenerAdapter {
 			}
 		}
 	}
+	
+	public void getJingle(GuildMusicManager manager, String id) {
+		try {
+			JSONObject object = RadioHelper.getJingle(id);
+			
+			if (object.has("track")) {
+				JSONObject track = object.getJSONObject("track");
+				String trackUrl = track.getString("tra_url");
+
+				loadUrl(manager, trackUrl);
+				System.out.println("Url  : " + trackUrl);
+
+				TrackOptions currentTrackOptions = new TrackOptions();
+				currentTrackOptions.startTime = (track.has("tra_start_time") && !track.isNull("tra_start_time")) ? track.getDouble("tra_start_time") : null;
+				currentTrackOptions.finishTime = (track.has("tra_finish_time") && !track.isNull("tra_finish_time")) ? track.getDouble("tra_finish_time") : null;
+
+				trackOptions.put(trackUrl, currentTrackOptions);
+				System.out.println("Add " + currentTrackOptions + " to " + trackUrl);
+			}
+
+			if (object.has("numberOfTracks")) {
+//				System.out.println("Number of tracks : " + object.getInt("numberOfTracks"));
+			}
+			if (object.has("durationOfTracks")) {
+//				System.out.println("Durations of tracks : " + getTimestamp(object.getInt("durationOfTracks") * 1000L));
+			}
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	private void getNext(GuildMusicManager manager) {
 		// If there are some items, it's not necessary to ask for some new item
