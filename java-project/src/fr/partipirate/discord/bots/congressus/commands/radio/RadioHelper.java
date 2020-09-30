@@ -67,7 +67,21 @@ public class RadioHelper {
 			JSONObject object = call(getUrl("do_getNext"));
 
 			return object;
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
+		}
+
+		return null;
+	}
+
+	public static JSONObject getTrack(String id) {
+		try {
+			Properties parameters = new Properties(); parameters.setProperty("id", id);
+			JSONObject object = call(getUrl("do_playTrack", parameters));
+
+			return object;
+		} 
+		catch (Exception e) {
 		}
 
 		return null;
@@ -79,7 +93,8 @@ public class RadioHelper {
 			JSONObject object = call(getUrl("do_getJingle", parameters));
 
 			return object;
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 		}
 
 		return null;
