@@ -45,6 +45,7 @@ public class JingleCommand extends ADJCommand implements ICommand {
 		}
 		else {
 			bot.emptyTracks((TextChannel) channel);
+			bot.skipTrack((TextChannel) channel);
 			
 			Map<Long, GuildMusicManager> managers = bot.getMusicManagers();
 
