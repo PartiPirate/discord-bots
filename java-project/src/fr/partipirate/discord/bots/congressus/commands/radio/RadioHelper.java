@@ -76,7 +76,8 @@ public class RadioHelper {
 
 	public static JSONObject getTrack(String id) {
 		try {
-			Properties parameters = new Properties(); parameters.setProperty("id", id);
+			Properties parameters = new Properties(); 
+			parameters.setProperty("id", id);
 			JSONObject object = call(getUrl("do_playTrack", parameters));
 
 			return object;
@@ -89,7 +90,8 @@ public class RadioHelper {
 
 	public static JSONObject getJingle(String id) {
 		try {
-			Properties parameters = new Properties(); parameters.setProperty("id", id);
+			Properties parameters = new Properties(); 
+			parameters.setProperty("id", id);
 			JSONObject object = call(getUrl("do_getJingle", parameters));
 
 			return object;

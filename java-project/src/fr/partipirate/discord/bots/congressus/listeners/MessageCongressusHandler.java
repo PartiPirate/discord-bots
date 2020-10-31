@@ -8,28 +8,36 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import fr.partipirate.discord.bots.congressus.Configuration;
 import fr.partipirate.discord.bots.congressus.CongressusBot;
+import fr.partipirate.discord.bots.congressus.GuildMusicManager;
 import fr.partipirate.discord.bots.congressus.commands.congressus.CongressusHelper;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Category;
 import net.dv8tion.jda.core.entities.Channel;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.core.managers.AudioManager;
 import net.dv8tion.jda.core.managers.GuildController;
 import net.dv8tion.jda.core.managers.RoleManager;
 import net.dv8tion.jda.core.requests.restaction.ChannelAction;
 
 public class MessageCongressusHandler extends ListenerAdapter {
-	private static final long DELAY = 600000L; // 10mn
+	private static long DELAY = 600000L; // 10mn, by default
+	private static String CONSUMER = "discord"; // discord, by default
 	private static MessageCongressusHandler INSTANCE;
 	private CongressusBot congressusBot;
 
@@ -38,6 +46,19 @@ public class MessageCongressusHandler extends ListenerAdapter {
 
 		launchMessageConsumerThread();
 
+		if (Configuration.getInstance().OPTIONS.get("message") != null) {
+			String delayString = Configuration.getInstance().OPTIONS.get("message").get("delay");
+			if (delayString != null) {
+				DELAY = Integer.parseInt(delayString);
+			}
+
+			String consumer = Configuration.getInstance().OPTIONS.get("message").get("consumer");
+			if (delayString != null) {
+				CONSUMER = consumer;
+			}
+		}
+		
+		
 		INSTANCE = this;
 	}
 
@@ -117,7 +138,7 @@ public class MessageCongressusHandler extends ListenerAdapter {
 	private boolean handleMessage(BigInteger id, String consumer, JSONObject message) {
 		System.out.println("Id : " + id + ", consumer :" + consumer);
 		
-		if (!consumer.equals("discord")) {
+		if (!consumer.equals(CONSUMER)) {
 			System.out.println("Not for me");
 			return false;
 		}
@@ -129,6 +150,16 @@ public class MessageCongressusHandler extends ListenerAdapter {
 
 		try {
 			switch(action + "-" + type) {
+				case "mute-all":
+					return muteAll(message);
+				case "mute-user":
+					return muteUser(message);
+				case "unmute-user":
+					return unmuteUser(message);
+				case "play-jingle":
+					return playJingle(message);
+				case "play-track":
+					return playTrack(message);
 				case "create-message":
 					return createMessage(message);
 				case "create-role":
@@ -145,6 +176,83 @@ public class MessageCongressusHandler extends ListenerAdapter {
 		}
 
 		return false;
+	}
+
+	private boolean muteAll(JSONObject message) {
+		List<String> exceptIds = new ArrayList<String>();
+
+		for (AudioManager audioManager : congressusBot.getJDA().getAudioManagers()) {
+			VoiceChannel voiceChannel = audioManager.getConnectedChannel();
+			List<Member> members = voiceChannel.getMembers();
+
+			for (Member member : members) {
+				if (exceptIds.size() == 0 || !exceptIds.contains(member.getUser().getId())) {
+					audioManager.getGuild().getController().setMute(member, true);
+				}
+			}
+		}
+
+		return true;
+	}
+
+	private boolean muteUser(JSONObject message) {
+		for (AudioManager audioManager : congressusBot.getJDA().getAudioManagers()) {
+			VoiceChannel voiceChannel = audioManager.getConnectedChannel();
+			List<Member> members = voiceChannel.getMembers();
+
+			for (Member member : members) {
+				if (member.getUser().getId() == message.getString("id")) {
+					audioManager.getGuild().getController().setMute(member, true);
+					return true;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	private boolean unmuteUser(JSONObject message) {
+		for (AudioManager audioManager : congressusBot.getJDA().getAudioManagers()) {
+			VoiceChannel voiceChannel = audioManager.getConnectedChannel();
+			List<Member> members = voiceChannel.getMembers();
+
+			for (Member member : members) {
+				if (member.getUser().getId() == message.getString("id")) {
+					audioManager.getGuild().getController().setMute(member, false);
+					return true;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	private boolean playJingle(JSONObject message) {
+		Map<Long, GuildMusicManager> managers = congressusBot.getMusicManagers();
+
+		for (Iterator<GuildMusicManager> iterator = managers.values().iterator(); iterator.hasNext();) {
+			GuildMusicManager manager = iterator.next();
+			manager.scheduler.clear();
+			manager.scheduler.nextTrack();
+
+			RadioHandler.getInstance().getJingle(manager, Integer.toString(message.getInt("data")));
+		}
+
+		return true;
+	}
+
+	private boolean playTrack(JSONObject message) {
+		Map<Long, GuildMusicManager> managers = congressusBot.getMusicManagers();
+
+		for (Iterator<GuildMusicManager> iterator = managers.values().iterator(); iterator.hasNext();) {
+			GuildMusicManager manager = iterator.next();
+			manager.scheduler.clear();
+			manager.scheduler.nextTrack();
+
+			RadioHandler.getInstance().getTrack(manager, Integer.toString(message.getInt("data")));
+		}
+
+		return true;
 	}
 
 	private boolean createMessage(JSONObject message) {
