@@ -21,6 +21,8 @@ public class CommandHandler extends ListenerAdapter {
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
 		String message = event.getMessage().getContentRaw();
+
+		System.out.println(message);
 		
 		if (event.getAuthor().getName().equals("Congressus")) {
 			return;
