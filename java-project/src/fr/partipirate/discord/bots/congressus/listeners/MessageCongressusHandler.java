@@ -44,8 +44,6 @@ public class MessageCongressusHandler extends ListenerAdapter {
 	public MessageCongressusHandler(CongressusBot congressusBot) {
 		this.congressusBot = congressusBot;
 
-		launchMessageConsumerThread();
-
 		if (Configuration.getInstance().OPTIONS.get("message") != null) {
 			String delayString = Configuration.getInstance().OPTIONS.get("message").get("delay");
 			if (delayString != null) {
@@ -57,7 +55,8 @@ public class MessageCongressusHandler extends ListenerAdapter {
 				CONSUMER = consumer;
 			}
 		}
-		
+
+		launchMessageConsumerThread();
 		
 		INSTANCE = this;
 	}
