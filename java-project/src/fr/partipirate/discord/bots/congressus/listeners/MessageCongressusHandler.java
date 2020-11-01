@@ -30,7 +30,6 @@ import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import net.dv8tion.jda.core.managers.AudioManager;
 import net.dv8tion.jda.core.managers.GuildController;
 import net.dv8tion.jda.core.managers.RoleManager;
 import net.dv8tion.jda.core.requests.restaction.ChannelAction;
@@ -185,6 +184,7 @@ public class MessageCongressusHandler extends ListenerAdapter {
 				List<Member> members = voiceChannel.getMembers();
 	
 				for (Member member : members) {
+					System.out.println("Test " + member.getUser().getId() + " => " + (member.getNickname() != null ? member.getNickname() : member.getUser().getName()));
 					if (member.getUser().getIdLong() == message.getLong("id")) {
 						try {
 							if (exceptIds.size() == 0 || !exceptIds.contains(member.getUser().getId())) {
