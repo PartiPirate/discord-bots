@@ -29,12 +29,12 @@ import net.dv8tion.jda.core.events.guild.voice.GuildVoiceSelfMuteEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 public class VocalChannelsHandler extends ListenerAdapter implements ConnectionListener {
-	static {
-		String[] serverlist = { "172.17.0.1:11211"};
-		SockIOPool pool = SockIOPool.getInstance();
-		pool.setServers(serverlist);
-		pool.initialize();
-	}
+//	static {
+//		String[] serverlist = { "172.17.0.1:11211"};
+//		SockIOPool pool = SockIOPool.getInstance();
+//		pool.setServers(serverlist);
+//		pool.initialize();
+//	}
 
 	private static Map<VoiceChannel, Map<Member, String>> CHANNELS = new HashMap<VoiceChannel, Map<Member, String>>();
 	private static VocalChannelsHandler INSTANCE;
@@ -172,8 +172,8 @@ public class VocalChannelsHandler extends ListenerAdapter implements ConnectionL
 			array.put(object);
 		}
 
-		MemCachedClient mc = new MemCachedClient();
-		mc.set("voice_channel_" + voiceChannel.getId(), array.toString());
+//		MemCachedClient mc = new MemCachedClient();
+//		mc.set("voice_channel_" + voiceChannel.getId(), array.toString());
 		
 		return array.toString();
 	}
