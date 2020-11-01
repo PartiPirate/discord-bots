@@ -1,5 +1,7 @@
 package fr.partipirate.discord.bots.congressus.listeners;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,7 @@ import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceSelfDeafenEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceSelfMuteEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.spy.memcached.MemcachedClient;
 
 public class VocalChannelsHandler extends ListenerAdapter implements ConnectionListener {
 //	static {
@@ -171,6 +174,14 @@ public class VocalChannelsHandler extends ListenerAdapter implements ConnectionL
 
 //		MemCachedClient mc = new MemCachedClient();
 //		mc.set("voice_channel_" + voiceChannel.getId(), array.toString());
+		
+		try {
+			MemcachedClient mc = new MemcachedClient(new InetSocketAddress("172.17.0.1", 11211));
+			mc.set("voice_channel_" + voiceChannel.getId(), 0, array.toString());
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		return array.toString();
 	}
