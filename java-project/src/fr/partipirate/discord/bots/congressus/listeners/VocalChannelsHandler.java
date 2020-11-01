@@ -150,6 +150,8 @@ public class VocalChannelsHandler extends ListenerAdapter {
 
 			object.put("id", member.getUser().getId());
 			object.put("nickname", member.getNickname());
+			object.put("username", member.getUser().getName());
+			object.put("userId", member.getUser().getId());
 			object.put("isSelfDeafened", member.getVoiceState().isSelfDeafened());
 			object.put("isGuildDeafened", member.getVoiceState().isGuildDeafened());
 			object.put("isSelfMuted", member.getVoiceState().isSelfMuted());
