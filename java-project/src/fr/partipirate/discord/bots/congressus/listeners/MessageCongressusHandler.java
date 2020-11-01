@@ -186,7 +186,11 @@ public class MessageCongressusHandler extends ListenerAdapter {
 
 			for (Member member : members) {
 				if (exceptIds.size() == 0 || !exceptIds.contains(member.getUser().getId())) {
-					audioManager.getGuild().getController().setMute(member, true);
+					try {
+						audioManager.getGuild().getController().setMute(member, true);
+					}
+					catch(Exception e) {
+					}
 				}
 			}
 		}
@@ -201,7 +205,12 @@ public class MessageCongressusHandler extends ListenerAdapter {
 
 			for (Member member : members) {
 				if (member.getUser().getIdLong() == message.getLong("id")) {
-					audioManager.getGuild().getController().setMute(member, true);
+					try {
+						audioManager.getGuild().getController().setMute(member, true);
+					}
+					catch(Exception e) {
+					}
+
 					return true;
 				}
 			}
@@ -217,7 +226,12 @@ public class MessageCongressusHandler extends ListenerAdapter {
 
 			for (Member member : members) {
 				if (member.getUser().getIdLong() == message.getLong("id")) {
-					audioManager.getGuild().getController().setMute(member, false);
+					try {
+						audioManager.getGuild().getController().setMute(member, false);
+					}
+					catch(Exception e) {
+					}
+
 					return true;
 				}
 			}
