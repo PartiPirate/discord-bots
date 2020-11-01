@@ -9,8 +9,14 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.whalin.MemCached.MemCachedClient;
+import com.whalin.MemCached.SockIOPool;
+
 import fr.partipirate.discord.bots.congressus.CongressusBot;
+import net.dv8tion.jda.core.audio.hooks.ConnectionListener;
+import net.dv8tion.jda.core.audio.hooks.ConnectionStatus;
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceGuildDeafenEvent;
@@ -22,7 +28,13 @@ import net.dv8tion.jda.core.events.guild.voice.GuildVoiceSelfDeafenEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceSelfMuteEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-public class VocalChannelsHandler extends ListenerAdapter {
+public class VocalChannelsHandler extends ListenerAdapter implements ConnectionListener {
+	static {
+		String[] serverlist = { "172.17.0.1:11211"};
+		SockIOPool pool = SockIOPool.getInstance();
+		pool.setServers(serverlist);
+		pool.initialize();
+	}
 
 	private static Map<VoiceChannel, Map<Member, String>> CHANNELS = new HashMap<VoiceChannel, Map<Member, String>>();
 	private static VocalChannelsHandler INSTANCE;
@@ -137,9 +149,9 @@ public class VocalChannelsHandler extends ListenerAdapter {
 			}
 		}
 	}
-	
+
 //	onGuildVoice
-	
+
 	public String stringify(VoiceChannel voiceChannel) {
 		JSONArray array = new JSONArray();
 
@@ -160,6 +172,22 @@ public class VocalChannelsHandler extends ListenerAdapter {
 			array.put(object);
 		}
 
+		MemCachedClient mc = new MemCachedClient();
+		mc.set("voice_channel_" + voiceChannel.getId(), array.toString());
+		
 		return array.toString();
+	}
+
+	@Override
+	public void onPing(long ping) {
+	}
+
+	@Override
+	public void onStatusChange(ConnectionStatus connectionStatus) {
+	}
+
+	@Override
+	public void onUserSpeaking(User user, boolean isSpeaking) {
+		// change speaping status of a user
 	}
 }
