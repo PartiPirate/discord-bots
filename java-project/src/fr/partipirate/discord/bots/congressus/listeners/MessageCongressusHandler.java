@@ -179,18 +179,22 @@ public class MessageCongressusHandler extends ListenerAdapter {
 
 	private boolean muteAll(JSONObject message) {
 		List<String> exceptIds = new ArrayList<String>();
-
-		for (AudioManager audioManager : congressusBot.getJDA().getAudioManagers()) {
-			VoiceChannel voiceChannel = audioManager.getConnectedChannel();
-			List<Member> members = voiceChannel.getMembers();
-
-			for (Member member : members) {
-				if (exceptIds.size() == 0 || !exceptIds.contains(member.getUser().getId())) {
-					try {
-						audioManager.getGuild().getController().setMute(member, true);
-					}
-					catch(Exception e) {
-						e.printStackTrace();
+		
+		for(Guild guild : congressusBot.getJDA().getGuilds()) {
+			for (VoiceChannel voiceChannel : guild.getVoiceChannels()) {
+				List<Member> members = voiceChannel.getMembers();
+	
+				for (Member member : members) {
+					if (member.getUser().getIdLong() == message.getLong("id")) {
+						try {
+							if (exceptIds.size() == 0 || !exceptIds.contains(member.getUser().getId())) {
+								System.out.println("Mute " + (member.getNickname() != null ? member.getNickname() : member.getUser().getName()));
+								guild.getController().setMute(member, true).complete();
+							}
+						}
+						catch(Exception e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
@@ -200,20 +204,20 @@ public class MessageCongressusHandler extends ListenerAdapter {
 	}
 
 	private boolean muteUser(JSONObject message) {
-		for (AudioManager audioManager : congressusBot.getJDA().getAudioManagers()) {
-			VoiceChannel voiceChannel = audioManager.getConnectedChannel();
-			List<Member> members = voiceChannel.getMembers();
-
-			for (Member member : members) {
-				if (member.getUser().getIdLong() == message.getLong("id")) {
-					try {
-						audioManager.getGuild().getController().setMute(member, true);
+		for(Guild guild : congressusBot.getJDA().getGuilds()) {
+			for (VoiceChannel voiceChannel : guild.getVoiceChannels()) {
+				List<Member> members = voiceChannel.getMembers();
+	
+				for (Member member : members) {
+					if (member.getUser().getIdLong() == message.getLong("id")) {
+						System.out.println("Mute " + (member.getNickname() != null ? member.getNickname() : member.getUser().getName()));
+						try {
+							guild.getController().setMute(member, true).complete();
+						}
+						catch(Exception e) {
+							e.printStackTrace();
+						}
 					}
-					catch(Exception e) {
-						e.printStackTrace();
-					}
-
-					return true;
 				}
 			}
 		}
@@ -222,20 +226,20 @@ public class MessageCongressusHandler extends ListenerAdapter {
 	}
 
 	private boolean unmuteUser(JSONObject message) {
-		for (AudioManager audioManager : congressusBot.getJDA().getAudioManagers()) {
-			VoiceChannel voiceChannel = audioManager.getConnectedChannel();
-			List<Member> members = voiceChannel.getMembers();
-
-			for (Member member : members) {
-				if (member.getUser().getIdLong() == message.getLong("id")) {
-					try {
-						audioManager.getGuild().getController().setMute(member, false);
+		for(Guild guild : congressusBot.getJDA().getGuilds()) {
+			for (VoiceChannel voiceChannel : guild.getVoiceChannels()) {
+				List<Member> members = voiceChannel.getMembers();
+	
+				for (Member member : members) {
+					if (member.getUser().getIdLong() == message.getLong("id")) {
+						System.out.println("Unmute " + (member.getNickname() != null ? member.getNickname() : member.getUser().getName()));
+						try {
+							guild.getController().setMute(member, false).complete();
+						}
+						catch(Exception e) {
+							e.printStackTrace();
+						}
 					}
-					catch(Exception e) {
-						e.printStackTrace();
-					}
-
-					return true;
 				}
 			}
 		}
