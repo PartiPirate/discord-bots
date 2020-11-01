@@ -176,8 +176,10 @@ public class VocalChannelsHandler extends ListenerAdapter implements ConnectionL
 //		mc.set("voice_channel_" + voiceChannel.getId(), array.toString());
 		
 		try {
-			MemcachedClient mc = new MemcachedClient(new InetSocketAddress("172.17.0.1", 11211));
-			mc.set("voice_channel_" + voiceChannel.getId(), 0, array.toString());
+			MemcachedClient mc = new MemcachedClient(new InetSocketAddress("192.168.0.100", 11211));
+			String key = "voice_channel_" + voiceChannel.getId();
+			System.out.println("Set memcached key : " + key);
+			mc.set(key, 0, array.toString());
 		} 
 		catch (IOException e) {
 			e.printStackTrace();
