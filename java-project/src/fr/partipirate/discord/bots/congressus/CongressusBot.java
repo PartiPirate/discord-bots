@@ -61,7 +61,7 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 			System.out.println(eventListener.getClass().getName() + " listener found");
 			jdaBuilder.addEventListener(eventListener);
 		}
-		jdaBuilder.addEventListener(new VocalChannelsHandler());
+		jdaBuilder.addEventListener(new VocalChannelsHandler(congressusBot));
 
 		jdaBuilder.setBulkDeleteSplittingEnabled(false);
 
@@ -127,6 +127,10 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 		
 		if (Configuration.getInstance().NAME != null) {
 			setBotNickname(Configuration.getInstance().NAME);
+		}
+
+		if (VocalChannelsHandler.getInstance() != null) {
+					VocalChannelsHandler.getInstance().checkAllVoiceChannels();
 		}
 	}
 	
