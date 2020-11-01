@@ -18,6 +18,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import fr.partipirate.discord.bots.congressus.commands.ICommand;
 import fr.partipirate.discord.bots.congressus.listeners.SpeakingVolumeHandler;
+import fr.partipirate.discord.bots.congressus.listeners.VocalChannelsHandler;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -60,6 +61,7 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 			System.out.println(eventListener.getClass().getName() + " listener found");
 			jdaBuilder.addEventListener(eventListener);
 		}
+		jdaBuilder.addEventListener(new VocalChannelsHandler());
 
 		jdaBuilder.setBulkDeleteSplittingEnabled(false);
 
