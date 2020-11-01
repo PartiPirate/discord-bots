@@ -190,6 +190,7 @@ public class MessageCongressusHandler extends ListenerAdapter {
 						audioManager.getGuild().getController().setMute(member, true);
 					}
 					catch(Exception e) {
+						e.printStackTrace();
 					}
 				}
 			}
@@ -209,6 +210,7 @@ public class MessageCongressusHandler extends ListenerAdapter {
 						audioManager.getGuild().getController().setMute(member, true);
 					}
 					catch(Exception e) {
+						e.printStackTrace();
 					}
 
 					return true;
@@ -230,6 +232,7 @@ public class MessageCongressusHandler extends ListenerAdapter {
 						audioManager.getGuild().getController().setMute(member, false);
 					}
 					catch(Exception e) {
+						e.printStackTrace();
 					}
 
 					return true;
