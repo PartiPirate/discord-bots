@@ -184,18 +184,14 @@ public class MessageCongressusHandler extends ListenerAdapter {
 				List<Member> members = voiceChannel.getMembers();
 	
 				for (Member member : members) {
-					System.out.println("Test " + member.getUser().getId() + " => " + (member.getNickname() != null ? member.getNickname() : member.getUser().getName()));
-					System.out.println("\t vs " + message.getLong("id"));
-					if (member.getUser().getIdLong() == message.getLong("id")) {
-						try {
-							if (exceptIds.size() == 0 || !exceptIds.contains(member.getUser().getId())) {
-								System.out.println("Mute " + (member.getNickname() != null ? member.getNickname() : member.getUser().getName()));
-								guild.getController().setMute(member, true).complete();
-							}
+					try {
+						if (exceptIds.size() == 0 || !exceptIds.contains(member.getUser().getId())) {
+							System.out.println("Mute " + (member.getNickname() != null ? member.getNickname() : member.getUser().getName()));
+							guild.getController().setMute(member, true).complete();
 						}
-						catch(Exception e) {
-							e.printStackTrace();
-						}
+					}
+					catch(Exception e) {
+						e.printStackTrace();
 					}
 				}
 			}
@@ -210,6 +206,9 @@ public class MessageCongressusHandler extends ListenerAdapter {
 				List<Member> members = voiceChannel.getMembers();
 	
 				for (Member member : members) {
+					System.out.println("Test " + member.getUser().getId() + " => " + (member.getNickname() != null ? member.getNickname() : member.getUser().getName()));
+					System.out.println("\t vs " + message.getLong("id"));
+
 					if (member.getUser().getIdLong() == message.getLong("id")) {
 						System.out.println("Mute " + (member.getNickname() != null ? member.getNickname() : member.getUser().getName()));
 						try {
