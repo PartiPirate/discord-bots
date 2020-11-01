@@ -200,7 +200,7 @@ public class MessageCongressusHandler extends ListenerAdapter {
 			List<Member> members = voiceChannel.getMembers();
 
 			for (Member member : members) {
-				if (member.getUser().getId() == message.getString("id")) {
+				if (member.getUser().getIdLong() == message.getLong("id")) {
 					audioManager.getGuild().getController().setMute(member, true);
 					return true;
 				}
@@ -216,7 +216,7 @@ public class MessageCongressusHandler extends ListenerAdapter {
 			List<Member> members = voiceChannel.getMembers();
 
 			for (Member member : members) {
-				if (member.getUser().getId() == message.getString("id")) {
+				if (member.getUser().getIdLong() == message.getLong("id")) {
 					audioManager.getGuild().getController().setMute(member, false);
 					return true;
 				}
@@ -234,7 +234,7 @@ public class MessageCongressusHandler extends ListenerAdapter {
 			manager.scheduler.clear();
 			manager.scheduler.nextTrack();
 
-			RadioHandler.getInstance().getJingle(manager, Integer.toString(message.getInt("data")));
+			RadioHandler.getInstance().getJingle(manager, Integer.toString(message.getInt("id")));
 		}
 
 		return true;
@@ -248,7 +248,7 @@ public class MessageCongressusHandler extends ListenerAdapter {
 			manager.scheduler.clear();
 			manager.scheduler.nextTrack();
 
-			RadioHandler.getInstance().getTrack(manager, Integer.toString(message.getInt("data")));
+			RadioHandler.getInstance().getTrack(manager, Integer.toString(message.getInt("id")));
 		}
 
 		return true;
