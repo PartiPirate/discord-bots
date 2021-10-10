@@ -155,20 +155,24 @@ public class OnConnectionHandler extends ListenerAdapter {
 			Role role = null;
 			for(int index = 0; role == null && index < roles.size(); ++index) {
 				Role indexedRole = roles.get(index);
+				
+				System.out.println("Compare role : " + group + " to existing one : " + indexedRole.getName());
+
 				if (indexedRole.getName().equalsIgnoreCase(group)) {
 					role = indexedRole;
+					System.out.println("\tFound !");
 					break;
 				}
 			}
 
 			if (role == null) {
-				System.out.println("Role \"" + group + "\\\" not found into the list");
+				System.out.println("\tRole \"" + group + "\\\" not found into the list");
 
 				role = controller.createRole().complete();
 				role.getManager().setName(group).complete();
 
 				// Do it a second time if the RoleHandler doesn't catch the role create event
-				roles.add(role);
+				RoleHandler.getInstance().addRoleOnGuild(member.getGuild(), role);
 			}
 
 			controller.addSingleRoleToMember(member, role).complete();
