@@ -1,6 +1,5 @@
 package fr.partipirate.discord.bots.congressus.listeners;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +37,16 @@ public class VocalChannelsHandler extends ListenerAdapter implements ConnectionL
 
 	private static Map<VoiceChannel, Map<Member, String>> CHANNELS = new HashMap<VoiceChannel, Map<Member, String>>();
 	private static VocalChannelsHandler INSTANCE;
+	private static MemcachedClient MEMCACHED_CLIENT;
+	
+	static {
+		try {
+			MEMCACHED_CLIENT = new MemcachedClient(new InetSocketAddress("192.168.0.100", 11211));
+		}
+		catch (Exception e) {
+		}
+	}
+
 	private CongressusBot bot;
 
 	public VocalChannelsHandler(CongressusBot congressusBot) {
@@ -65,8 +74,8 @@ public class VocalChannelsHandler extends ListenerAdapter implements ConnectionL
 
 	@Override
 	public void onGenericEvent(Event event) {
-		System.out.print("Event : ");
-		System.out.println(event.getClass().getName());
+//		System.out.print("Event : ");
+//		System.out.println(event.getClass().getName());
 	}
 
 	private Map<Member, String> getChannelMap(VoiceChannel channel) {
@@ -99,21 +108,21 @@ public class VocalChannelsHandler extends ListenerAdapter implements ConnectionL
 	@Override
 	public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
 		putMemberInChannel(event.getChannelJoined(), event.getMember());
-		System.out.println(stringify(event.getChannelJoined()));
+//		System.out.println(stringify(event.getChannelJoined()));
 	}
 
 	@Override
 	public void onGuildVoiceMove(GuildVoiceMoveEvent event) {
 		putMemberInChannel(event.getChannelJoined(), event.getMember());
 		removeMemberInChannel(event.getChannelLeft(), event.getMember());
-		System.out.println(stringify(event.getChannelJoined()));
-		System.out.println(stringify(event.getChannelLeft()));
+//		System.out.println(stringify(event.getChannelJoined()));
+//		System.out.println(stringify(event.getChannelLeft()));
 	}
 
 	@Override
 	public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
 		removeMemberInChannel(event.getChannelLeft(), event.getMember());
-		System.out.println(stringify(event.getChannelLeft()));
+//		System.out.println(stringify(event.getChannelLeft()));
 	}
 
 	/* User mute/deafen */
@@ -142,8 +151,8 @@ public class VocalChannelsHandler extends ListenerAdapter implements ConnectionL
 		for (Entry<VoiceChannel, Map<Member, String>> entry : CHANNELS.entrySet()) {
 			for (Member member : entry.getValue().keySet()) {
 				if (member.equals(eventMember)) {
-					System.out.println(entry.getKey().getName());
-					System.out.println(stringify(entry.getKey()));
+//					System.out.println(entry.getKey().getName());
+//					System.out.println(stringify(entry.getKey()));
 					return;
 				}
 			}
@@ -171,17 +180,13 @@ public class VocalChannelsHandler extends ListenerAdapter implements ConnectionL
 
 			array.put(object);
 		}
-
-//		MemCachedClient mc = new MemCachedClient();
-//		mc.set("voice_channel_" + voiceChannel.getId(), array.toString());
 		
 		try {
-			MemcachedClient mc = new MemcachedClient(new InetSocketAddress("192.168.0.100", 11211));
 			String key = "voice_channel_" + voiceChannel.getId();
 			System.out.println("Set memcached key : " + key);
-			mc.set(key, 0, array.toString());
+			if (MEMCACHED_CLIENT != null) MEMCACHED_CLIENT.set(key, 0, array.toString());
 		} 
-		catch (IOException e) {
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		
