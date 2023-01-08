@@ -14,9 +14,9 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import fr.partipirate.discord.bots.congressus.CongressusBot;
 import fr.partipirate.discord.bots.congressus.GuildMusicManager;
 import fr.partipirate.discord.bots.congressus.commands.radio.RadioHelper;
-import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.entities.Game.GameType;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Activity.ActivityType;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class RadioHandler extends ListenerAdapter {
 
@@ -42,15 +42,15 @@ public class RadioHandler extends ListenerAdapter {
 
 	public void resetGameTitle(AudioTrack track) {
 		if (track == null) {
-			this.congressusBot.getJDA().getPresence().setGame(null);
+			this.congressusBot.getJDA().getPresence().setActivity(null);
 			System.out.println("Show no title");
-//			this.congressusBot.getJDA().getPresence().setGame(Game.of(GameType.DEFAULT, null));
+//			this.congressusBot.getJDA().getPresence().setActivity(Game.of(GameType.DEFAULT, null));
 		} 
 		else {
 
 			String musicInfo = track.getInfo().title + " - " + track.getInfo().author ;
 
-			this.congressusBot.getJDA().getPresence().setGame(Game.of(GameType.LISTENING, musicInfo));
+			this.congressusBot.getJDA().getPresence().setActivity(Activity.of(ActivityType.LISTENING, musicInfo));
 			System.out.println("Show " + track.getInfo().title);
 			System.out.println("Duration : " + getTimestamp(track.getInfo().length));
 		}

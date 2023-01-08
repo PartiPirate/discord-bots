@@ -5,10 +5,10 @@ import java.util.List;
 
 import fr.partipirate.discord.bots.congressus.commands.ICommand;
 import fr.partipirate.discord.bots.congressus.listeners.OnConnectionHandler;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 
 public class RenewRightsCommand implements ICommand {
 

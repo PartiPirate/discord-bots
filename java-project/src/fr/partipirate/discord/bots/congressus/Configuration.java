@@ -13,8 +13,8 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import fr.partipirate.discord.bots.congressus.commands.ICommand;
-import net.dv8tion.jda.core.hooks.EventListener;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.hooks.EventListener;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class Configuration {
 	private static final Configuration INSTANCE = new Configuration();

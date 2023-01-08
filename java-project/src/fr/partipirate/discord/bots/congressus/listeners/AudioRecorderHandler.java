@@ -11,13 +11,13 @@ import java.util.Map;
 import org.apache.commons.collections4.map.HashedMap;
 
 import fr.partipirate.discord.bots.congressus.Configuration;
-import net.dv8tion.jda.core.audio.AudioReceiveHandler;
-import net.dv8tion.jda.core.audio.CombinedAudio;
-import net.dv8tion.jda.core.audio.UserAudio;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.entities.VoiceChannel;
+import net.dv8tion.jda.api.audio.AudioReceiveHandler;
+import net.dv8tion.jda.api.audio.CombinedAudio;
+import net.dv8tion.jda.api.audio.UserAudio;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 
 public class AudioRecorderHandler implements AudioReceiveHandler {
 

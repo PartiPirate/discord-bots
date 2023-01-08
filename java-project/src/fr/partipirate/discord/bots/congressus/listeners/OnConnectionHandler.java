@@ -20,13 +20,13 @@ import org.json.JSONTokener;
 import org.json.JSONWriter;
 
 import fr.partipirate.discord.bots.congressus.commands.personae.PersonaeHelper;
-import net.dv8tion.jda.core.OnlineStatus;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.user.update.UserUpdateOnlineStatusEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import net.dv8tion.jda.core.managers.GuildController;
+import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.user.update.UserUpdateOnlineStatusEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.entities.Guild;
 
 public class OnConnectionHandler extends ListenerAdapter {
 
@@ -141,7 +141,7 @@ public class OnConnectionHandler extends ListenerAdapter {
 	}
 
 	private void addDiscordRoles(Member member, List<String> groups) {
-		GuildController controller = new GuildController(member.getGuild());
+		Guild guild = member.getGuild();
 		
 		for (String group : groups) {
 			System.out.println("Search role for : " + group);
@@ -168,22 +168,25 @@ public class OnConnectionHandler extends ListenerAdapter {
 			if (role == null) {
 				System.out.println("\tRole \"" + group + "\\\" not found into the list");
 
-				role = controller.createRole().complete();
+				role = guild.createRole().complete();
 				role.getManager().setName(group).complete();
 
 				// Do it a second time if the RoleHandler doesn't catch the role create event
 				RoleHandler.getInstance().addRoleOnGuild(member.getGuild(), role);
 			}
 
-			controller.addSingleRoleToMember(member, role).complete();
+			List<Role> memberRoles = member.getRoles();
+			memberRoles.add(role);
+			guild.modifyMemberRoles(member, memberRoles).complete();
 			System.out.println("Add role : " + role + " to member " + member.getNickname());
 		}
 	}
 
 	private void discardDiscordRoles(Member member, List<String> groups) {
-		List<Role> discardedRoles = new ArrayList<>();
-		
-		for (Role role : member.getRoles()) {
+		List<Role> memberRoles = member.getRoles();
+		boolean rolesUpdated = false;
+
+		for (Role role : memberRoles) {
 			boolean isNotDiscarded = false;
 			for (String group : DO_NOT_DISCARD) {
 				if (role.getName().equalsIgnoreCase(group)) {
@@ -202,21 +205,15 @@ public class OnConnectionHandler extends ListenerAdapter {
 			}
 
 			if (isNotDiscarded) continue;
-			
-			discardedRoles.add(role);
+		
+			memberRoles.remove(role);
+			rolesUpdated = true;
 			System.out.println("Remove role : " + role + " to member " + member.getNickname());
 		}
 
-		if (discardedRoles.size() > 0) {
-			/*
-			System.out.println("Found roles");
-			System.out.println(member.getRoles());
-			System.out.println("Discarded roles");
-			System.out.println(discardedRoles);
-			*/
-			
-			GuildController controller = new GuildController(member.getGuild());
-			controller.removeRolesFromMember(member, discardedRoles).complete();
+		if (rolesUpdated) {
+			Guild guild = member.getGuild();
+			guild.modifyMemberRoles(member, memberRoles);
 		}
 	}
 

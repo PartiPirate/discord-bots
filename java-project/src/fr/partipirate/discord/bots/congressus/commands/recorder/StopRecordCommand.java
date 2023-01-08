@@ -9,11 +9,11 @@ import java.io.InputStreamReader;
 import fr.partipirate.discord.bots.congressus.Configuration;
 import fr.partipirate.discord.bots.congressus.commands.ICommand;
 import fr.partipirate.discord.bots.congressus.listeners.AudioRecorderHandler;
-import net.dv8tion.jda.core.audio.AudioReceiveHandler;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.PrivateChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.audio.AudioReceiveHandler;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
+import net.dv8tion.jda.api.entities.User;
 
 public class StopRecordCommand extends ARecorderCommand implements ICommand {
 
@@ -63,8 +63,8 @@ public class StopRecordCommand extends ARecorderCommand implements ICommand {
 			
 			String vocalChannel = vocalChannelBuilder.toString();
 */
-			if (guild.getAudioManager().getReceiveHandler() != null) {
-				AudioReceiveHandler previousHandler = guild.getAudioManager().getReceiveHandler();
+			if (guild.getAudioManager().getReceivingHandler() != null) {
+				AudioReceiveHandler previousHandler = guild.getAudioManager().getReceivingHandler();
 				if (previousHandler instanceof AudioRecorderHandler) {
 					AudioRecorderHandler recorder = (AudioRecorderHandler)previousHandler;
 					recorder.endRecording();

@@ -3,10 +3,10 @@ package fr.partipirate.discord.bots.congressus.commands.congressus;
 import java.awt.Color;
 
 import fr.partipirate.discord.bots.congressus.commands.ICommand;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 
 public class PPCommand extends ACongressusCommand implements ICommand {
 
@@ -32,7 +32,7 @@ public class PPCommand extends ACongressusCommand implements ICommand {
 			eb.setColor(new Color(0x8814CC));
 			eb.setDescription("La page wiki des statuts du Parti Pirate");
 
-			channel.sendMessage(eb.build()).complete();
+			channel.sendMessageEmbeds(eb.build()).complete();
 		}
 		else if (commandParts[1].equalsIgnoreCase("ri")) {
 			EmbedBuilder eb = new EmbedBuilder();				
@@ -41,7 +41,7 @@ public class PPCommand extends ACongressusCommand implements ICommand {
 			eb.setColor(new Color(0x8814CC));
 			eb.setDescription("La page wiki du règlement intérieur du Parti Pirate");
 
-			channel.sendMessage(eb.build()).complete();
+			channel.sendMessageEmbeds(eb.build()).complete();
 		}
 		else if (commandParts[1].equalsIgnoreCase("code")) {
 			EmbedBuilder eb = new EmbedBuilder();				
@@ -83,7 +83,7 @@ public class PPCommand extends ACongressusCommand implements ICommand {
 				}
 			}
 
-			channel.sendMessage(eb.build()).complete();
+			channel.sendMessageEmbeds(eb.build()).complete();
 		}
 	}
 

@@ -19,21 +19,20 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import fr.partipirate.discord.bots.congressus.commands.ICommand;
 import fr.partipirate.discord.bots.congressus.listeners.SpeakingVolumeHandler;
 import fr.partipirate.discord.bots.congressus.listeners.VocalChannelsHandler;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.VoiceChannel;
-import net.dv8tion.jda.core.events.Event;
-import net.dv8tion.jda.core.events.ReadyEvent;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
-import net.dv8tion.jda.core.hooks.EventListener;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import net.dv8tion.jda.core.managers.AudioManager;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.events.session.ReadyEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.RateLimitedException;
+import net.dv8tion.jda.api.hooks.EventListener;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.managers.AudioManager;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 
 public class CongressusBot extends ListenerAdapter implements EventListener {
 
@@ -47,23 +46,19 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 		CongressusBot congressusBot = new CongressusBot();
 		congressusBot.setSpeakingAware(Configuration.getInstance().SPEAKING_AWARE);
 
-		JDABuilder jdaBuilder = new JDABuilder(AccountType.BOT).setToken(Configuration.getInstance().TOKEN);
-		jdaBuilder.addEventListener(congressusBot);
-		jdaBuilder.addEventListener(new EventListener() {
-			@Override
-			public void onEvent(Event event) {
-//				System.out.println(event);
-			}
-		});
+		JDABuilder jdaBuilder = JDABuilder.createDefault(Configuration.getInstance().TOKEN);
+		jdaBuilder.addEventListeners(congressusBot);
 
 		for (Class pluginClass : Configuration.getInstance().LISTENER_PLUGINS) {
 			EventListener eventListener = Configuration.getInstance().getHandler(pluginClass, congressusBot);
 			System.out.println(eventListener.getClass().getName() + " listener found");
-			jdaBuilder.addEventListener(eventListener);
+			jdaBuilder.addEventListeners(eventListener);
 		}
-		jdaBuilder.addEventListener(new VocalChannelsHandler(congressusBot));
+		jdaBuilder.addEventListeners(new VocalChannelsHandler(congressusBot));
 
 		jdaBuilder.setBulkDeleteSplittingEnabled(false);
+
+		jdaBuilder.enableIntents(GatewayIntent.MESSAGE_CONTENT);
 
 		jdaBuilder.build().awaitReady();
 	}
@@ -138,7 +133,7 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 		if (this.jda == null) return; // Not yet ready
 
 		Member selfMember = this.jda.getGuilds().get(0).getMember(this.jda.getSelfUser());
-		this.jda.getGuilds().get(0).getController().setNickname(selfMember, nickname).complete();
+		this.jda.getGuilds().get(0).modifyNickname(selfMember, nickname).complete();
 	}
 
 	public synchronized GuildMusicManager getGuildAudioPlayer(Guild guild) {
@@ -255,7 +250,7 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 	}
 	
 	public VoiceChannel connectToVoiceChannel(AudioManager audioManager, String channelName) {
-		if (!audioManager.isConnected() && !audioManager.isAttemptingToConnect()) {
+		if (!audioManager.isConnected()) {
 
 			audioManager.setConnectionListener(new SpeakingVolumeHandler(audioManager, this));
 

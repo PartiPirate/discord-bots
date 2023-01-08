@@ -9,10 +9,10 @@ import fr.partipirate.discord.bots.congressus.CongressusBot;
 import fr.partipirate.discord.bots.congressus.GuildMusicManager;
 import fr.partipirate.discord.bots.congressus.commands.ICommand;
 import fr.partipirate.discord.bots.congressus.commands.dj.ADJCommand;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 
 public class DeleteTrackCommand extends ADJCommand implements ICommand {
 

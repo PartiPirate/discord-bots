@@ -11,21 +11,20 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import fr.partipirate.discord.bots.congressus.CongressusBot;
-import net.dv8tion.jda.core.audio.hooks.ConnectionListener;
-import net.dv8tion.jda.core.audio.hooks.ConnectionStatus;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.entities.VoiceChannel;
-import net.dv8tion.jda.core.events.Event;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceGuildDeafenEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceGuildMuteEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceJoinEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceSelfDeafenEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceSelfMuteEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import net.spy.memcached.MemcachedClient;
+import net.dv8tion.jda.api.audio.hooks.ConnectionListener;
+import net.dv8tion.jda.api.audio.hooks.ConnectionStatus;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
+import net.dv8tion.jda.api.events.GenericEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceGuildDeafenEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceGuildMuteEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceSelfDeafenEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceSelfMuteEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+//import net.spy.memcached.MemcachedClient;
 
 public class VocalChannelsHandler extends ListenerAdapter implements ConnectionListener {
 //	static {
@@ -37,6 +36,7 @@ public class VocalChannelsHandler extends ListenerAdapter implements ConnectionL
 
 	private static Map<VoiceChannel, Map<Member, String>> CHANNELS = new HashMap<VoiceChannel, Map<Member, String>>();
 	private static VocalChannelsHandler INSTANCE;
+	/*
 	private static MemcachedClient MEMCACHED_CLIENT;
 	
 	static {
@@ -46,6 +46,7 @@ public class VocalChannelsHandler extends ListenerAdapter implements ConnectionL
 		catch (Exception e) {
 		}
 	}
+	*/
 
 	private CongressusBot bot;
 
@@ -73,7 +74,7 @@ public class VocalChannelsHandler extends ListenerAdapter implements ConnectionL
 	}
 
 	@Override
-	public void onGenericEvent(Event event) {
+	public void onGenericEvent(GenericEvent event) {
 //		System.out.print("Event : ");
 //		System.out.println(event.getClass().getName());
 	}
@@ -106,23 +107,16 @@ public class VocalChannelsHandler extends ListenerAdapter implements ConnectionL
 	/* User leave, move, join */
 
 	@Override
-	public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
-		putMemberInChannel(event.getChannelJoined(), event.getMember());
-//		System.out.println(stringify(event.getChannelJoined()));
-	}
-
-	@Override
-	public void onGuildVoiceMove(GuildVoiceMoveEvent event) {
-		putMemberInChannel(event.getChannelJoined(), event.getMember());
-		removeMemberInChannel(event.getChannelLeft(), event.getMember());
-//		System.out.println(stringify(event.getChannelJoined()));
-//		System.out.println(stringify(event.getChannelLeft()));
-	}
-
-	@Override
-	public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
-		removeMemberInChannel(event.getChannelLeft(), event.getMember());
-//		System.out.println(stringify(event.getChannelLeft()));
+	public void onGuildVoiceUpdate(GuildVoiceUpdateEvent event) {
+		if (event.getChannelJoined() != null) {
+			putMemberInChannel(event.getChannelJoined().asVoiceChannel(), event.getMember());
+			System.out.println(stringify(event.getChannelJoined().asVoiceChannel()));
+		}
+		if (event.getChannelLeft() != null) {
+			removeMemberInChannel(event.getChannelLeft().asVoiceChannel(), event.getMember());
+			System.out.println(stringify(event.getChannelLeft().asVoiceChannel()));
+		}
+		
 	}
 
 	/* User mute/deafen */
@@ -181,6 +175,7 @@ public class VocalChannelsHandler extends ListenerAdapter implements ConnectionL
 			array.put(object);
 		}
 		
+		/*
 		try {
 			String key = "voice_channel_" + voiceChannel.getId();
 			System.out.println("Set memcached key : " + key);
@@ -189,6 +184,7 @@ public class VocalChannelsHandler extends ListenerAdapter implements ConnectionL
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
 		
 		return array.toString();
 	}

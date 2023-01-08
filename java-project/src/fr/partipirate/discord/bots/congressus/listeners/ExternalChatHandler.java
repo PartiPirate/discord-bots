@@ -8,12 +8,13 @@ import java.net.URLEncoder;
 
 import fr.partipirate.discord.bots.congressus.Configuration;
 import fr.partipirate.discord.bots.congressus.commands.congressus.CongressusHelper;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.events.message.MessageUpdateEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.channel.Channel;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageUpdateEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class ExternalChatHandler extends ListenerAdapter {
 
@@ -22,22 +23,22 @@ public class ExternalChatHandler extends ListenerAdapter {
 
 	@Override
 	public void onMessageUpdate(MessageUpdateEvent event) {
-		handleMessage(event.getAuthor(), event.getTextChannel(), event.getMessage());
+		if (event.isFromType(ChannelType.TEXT)) {
+			handleMessage(event.getAuthor(), event.getChannel(), event.getMessage());
+		}
 	}
 
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
-		handleMessage(event.getAuthor(), event.getTextChannel(), event.getMessage());
+		if (event.isFromType(ChannelType.TEXT)) {
+			handleMessage(event.getAuthor(), event.getChannel(), event.getMessage());
+		}
 	}
 
-	private void handleMessage(User author, TextChannel textChannel, Message sourceMessage) {
+	private void handleMessage(User author, Channel textChannel, Message sourceMessage) {
 		String message = sourceMessage.getContentRaw();
 		
 		if (author.getName().equals("Congressus")) {
-			return;
-		}
-		
-		if (textChannel == null) {
 			return;
 		}
 		

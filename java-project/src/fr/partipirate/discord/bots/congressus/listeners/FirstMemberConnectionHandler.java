@@ -12,12 +12,12 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.json.JSONWriter;
 
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.OnlineStatus;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.user.update.UserUpdateOnlineStatusEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.user.update.UserUpdateOnlineStatusEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class FirstMemberConnectionHandler extends ListenerAdapter {
 

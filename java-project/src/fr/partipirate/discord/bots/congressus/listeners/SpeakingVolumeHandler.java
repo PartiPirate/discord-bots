@@ -1,10 +1,10 @@
 package fr.partipirate.discord.bots.congressus.listeners;
 
 import fr.partipirate.discord.bots.congressus.CongressusBot;
-import net.dv8tion.jda.core.audio.hooks.ConnectionListener;
-import net.dv8tion.jda.core.audio.hooks.ConnectionStatus;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.managers.AudioManager;
+import net.dv8tion.jda.api.audio.hooks.ConnectionListener;
+import net.dv8tion.jda.api.audio.hooks.ConnectionStatus;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.managers.AudioManager;
 
 public class SpeakingVolumeHandler implements ConnectionListener {
 	private AudioManager audioManager;

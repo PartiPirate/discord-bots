@@ -11,10 +11,10 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import fr.partipirate.discord.bots.congressus.Configuration;
 import fr.partipirate.discord.bots.congressus.CongressusBot;
 import fr.partipirate.discord.bots.congressus.GuildMusicManager;
-import net.dv8tion.jda.core.audio.AudioReceiveHandler;
-import net.dv8tion.jda.core.entities.PrivateChannel;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceJoinEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.audio.AudioReceiveHandler;
+import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
+//import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 /**
  * Add an handler for the recorder, emitting some silenced sound
@@ -37,6 +37,10 @@ public class RecorderHandler extends ListenerAdapter {
 		return INSTANCE;
 	}
 
+	/**
+	 * TODO: fix
+	 * l'event GuildVoiceJoinEvent n'existe plus
+	
 	public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
 		if (event.getMember().getUser().equals(event.getJDA().getSelfUser())) return; // Don't care
 		System.out.println(event);
@@ -57,6 +61,8 @@ public class RecorderHandler extends ListenerAdapter {
 			}
 		}
 	}
+
+	*/
 
 	private void launchRadioSupervisor() {
 		Thread checkStatusThread = new Thread() {

@@ -6,12 +6,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import fr.partipirate.discord.bots.congressus.commands.ICommand;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.MessageEmbed.Field;
-import net.dv8tion.jda.core.entities.PrivateChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.entities.MessageEmbed.Field;
+import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
+import net.dv8tion.jda.api.entities.User;
 
 public class RollCommand implements ICommand {
 
@@ -65,7 +65,7 @@ public class RollCommand implements ICommand {
 
 	            eb.addField(new Field("Jet", rollDescription.toString(), true));
 
-				channel.sendMessage(eb.build()).complete();
+				channel.sendMessageEmbeds(eb.build()).complete();
 			}
 		}
 	}
@@ -104,7 +104,7 @@ public class RollCommand implements ICommand {
 
         eb.addField(new Field("Jet", rollDescription.toString(), true));
 
-		System.out.println(eb.build().toJSONObject());
+		System.out.println(eb.build());
 
 	}
 

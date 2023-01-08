@@ -12,10 +12,10 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import fr.partipirate.discord.bots.congressus.commands.ICommand;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 
 public class NextMeetingCommand extends ACongressusCommand implements ICommand {
 
@@ -138,7 +138,7 @@ public class NextMeetingCommand extends ACongressusCommand implements ICommand {
 					eb.addField(":sound:", StringEscapeUtils.unescapeHtml4(minMeeting.getJSONObject("location").getJSONObject("discord").getJSONObject("vocal").getString("title")), true);
 				}
 				
-				channel.sendMessage(eb.build()).complete();
+				channel.sendMessageEmbeds(eb.build()).complete();
 			}
 			else {
 				channel.sendMessage("Pas de réunion prévue").complete();

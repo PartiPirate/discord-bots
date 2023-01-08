@@ -3,10 +3,10 @@ package fr.partipirate.discord.bots.congressus.commands;
 import java.util.List;
 
 import fr.partipirate.discord.bots.congressus.Configuration;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.PrivateChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
+import net.dv8tion.jda.api.entities.User;
 
 public class CommandsCommand implements ICommand {
 
