@@ -24,7 +24,7 @@
 	<classpathentry kind="lib" path="lib/lavaplayer-1.3.19.jar"/>
 	<classpathentry kind="lib" path="lib/commons-text-1.8.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang3-3.9.jar"/>
-	<classpathentry kind="lib" path="lib/JDA-5.0.0-beta.3-withDependencies.jar"/>
+	<classpathentry kind="lib" path="lib/JDA-5.0.0-beta.4-withDependencies.jar"/>
 	<classpathentry kind="lib" path="lib/spymemcached-2.8.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
