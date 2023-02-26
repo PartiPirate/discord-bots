@@ -56,7 +56,7 @@ public class RenewRightsCommand implements ICommand {
 				    System.out.println("Try another way...");
 
 				    for(Member member : guild.getMembers()) {
-					if (member.getEffectiveName().toLowerCase().contains(search.toLowerCase()) || member.getNickname().toLowerCase().contains(search.toLowerCase())) {
+					if ((member.getEffectiveName() != null && member.getEffectiveName().toLowerCase().contains(search.toLowerCase())) || (member.getNickname() != null && member.getNickname().toLowerCase().contains(search.toLowerCase()))) {
 					    members.add(member);
 					}
 				    }
