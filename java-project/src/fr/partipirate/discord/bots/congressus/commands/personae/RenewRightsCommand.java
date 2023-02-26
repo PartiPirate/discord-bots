@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import fr.partipirate.discord.bots.congressus.commands.ICommand;
 import fr.partipirate.discord.bots.congressus.listeners.OnConnectionHandler;
@@ -55,17 +56,25 @@ public class RenewRightsCommand implements ICommand {
 				if (members.size() == 0) {
 				    System.out.println("Try another way...");
 
-				    for(Member member : guild.getMembers()) {
-					if ((member.getEffectiveName() != null && member.getEffectiveName().toLowerCase().contains(search.toLowerCase())) || (member.getNickname() != null && member.getNickname().toLowerCase().contains(search.toLowerCase()))) {
-					    members.add(member);
+				    guild.pruneMemberCache();
+				    
+				    guild.loadMembers().onSuccess(new Consumer<List<Member>>() {
+					@Override
+					public void accept(List<Member> members) {
+					    for(Member member : guild.getMembers()) {
+						if ((member.getEffectiveName() != null && member.getEffectiveName().toLowerCase().contains(search.toLowerCase())) || (member.getNickname() != null && member.getNickname().toLowerCase().contains(search.toLowerCase()))) {
+						    OnConnectionHandler.getInstance().updateMember(member, false);
+						}
+					    }
 					}
-				    }
+				    });
 				}
-				
-				System.out.println("Found : " + members);
+				else {
+				    System.out.println("Found : " + members);
 
-				for (Member member : members) {
+				    for (Member member : members) {
 					OnConnectionHandler.getInstance().updateMember(member, false);
+				    }
 				}
 			}
 		}

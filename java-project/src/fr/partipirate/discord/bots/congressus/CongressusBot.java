@@ -33,6 +33,8 @@ import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.AudioManager;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 public class CongressusBot extends ListenerAdapter implements EventListener {
 
@@ -57,6 +59,9 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 		jdaBuilder.addEventListeners(new VocalChannelsHandler(congressusBot));
 
 		jdaBuilder.setBulkDeleteSplittingEnabled(false);
+
+		jdaBuilder.setChunkingFilter(ChunkingFilter.ALL); // enable member chunking for all guilds
+		jdaBuilder.setMemberCachePolicy(MemberCachePolicy.ALL);
 
 		jdaBuilder.enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS, 
 			GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_VOICE_STATES, 
