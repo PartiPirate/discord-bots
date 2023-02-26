@@ -11,55 +11,55 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class CommandHandler extends ListenerAdapter {
-	
-	private CongressusBot congressusBot;
 
-	public CommandHandler(CongressusBot congressusBot) {
-		this.congressusBot = congressusBot;
+    private CongressusBot congressusBot;
+
+    public CommandHandler(CongressusBot congressusBot) {
+	this.congressusBot = congressusBot;
+    }
+
+    @Override
+    public void onMessageReceived(MessageReceivedEvent event) {
+	String message = event.getMessage().getContentRaw();
+
+	System.out.println(message);
+
+	if (event.getAuthor().getName().equals("Congressus")) {
+	    return;
 	}
 
-	@Override
-	public void onMessageReceived(MessageReceivedEvent event) {
-		String message = event.getMessage().getContentRaw();
+	MessageChannel channel = event.getChannel();
+	Guild guild = event.getGuild();
+	User user = event.getAuthor();
 
-		System.out.println(message);
-		
-		if (event.getAuthor().getName().equals("Congressus")) {
-			return;
+	if (message.startsWith(Configuration.getInstance().PREFIX)) {
+	    try {
+		String[] commandParts = message.split(" ");
+		String command = commandParts[0].toLowerCase();
+
+		boolean foundCommand = false;
+
+		for (ICommand icommand : congressusBot.getCommands()) {
+		    if (command.equalsIgnoreCase(Configuration.getInstance().PREFIX + icommand.getKeyWord())) {
+			foundCommand = true;
+			icommand.doCommand(user, channel, guild, commandParts);
+		    }
 		}
-		
-		MessageChannel channel = event.getChannel();
-        Guild guild = event.getGuild();
-        User user = event.getAuthor();
-        
-		if (message.startsWith(Configuration.getInstance().PREFIX)) {
-			try {
-		        String[] commandParts = message.split(" ");
-				String command = commandParts[0].toLowerCase();
-				
-				boolean foundCommand = false;
-				
-		        for (ICommand icommand : congressusBot.getCommands()) {
-					if (command.equalsIgnoreCase(Configuration.getInstance().PREFIX + icommand.getKeyWord())) {
-						foundCommand = true;
-						icommand.doCommand(user, channel, guild, commandParts);
-					}
-				}
 
-		        if (!foundCommand) {
-					throw new NotCommandException(message);
-		        }
-			} 
-			catch (NotCommandException e) {
-				System.err.println("La commande \"" + message + "\" n'a pas été comprise.");
+		if (!foundCommand) {
+		    throw new NotCommandException(message);
+		}
+	    }
+	    catch (NotCommandException e) {
+		System.err.println("La commande \"" + message + "\" n'a pas été comprise.");
 //				e.printStackTrace();
 //				channel.sendMessage("La commande \"" + message + "\" n'a pas été comprise.").complete();
-			}
-			catch (Exception e) {
+	    }
+	    catch (Exception e) {
 //				System.err.println("La commande \"" + message + "\" n'a pas été comprise.");
-				e.printStackTrace();
+		e.printStackTrace();
 //				channel.sendMessage("La commande \"" + message + "\" n'a pas été comprise.").complete();
-			}
-		}
+	    }
 	}
+    }
 }
