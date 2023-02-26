@@ -1,7 +1,9 @@
 package fr.partipirate.discord.bots.congressus.commands.personae;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import fr.partipirate.discord.bots.congressus.commands.ICommand;
 import fr.partipirate.discord.bots.congressus.listeners.OnConnectionHandler;
@@ -43,12 +45,13 @@ public class RenewRightsCommand implements ICommand {
 
 				System.out.println("Will search for : " + search);
 
-				List<Member> members = new ArrayList<>();
+				Set<Member> members = new HashSet<>();
 				members.addAll(guild.getMembersByEffectiveName(search, true));
 				members.addAll(guild.getMembersByName(search, true));
-				
+				members.addAll(guild.getMembersByNickname(search, true));
+
 				System.out.println("Found : " + members);
-				
+
 				for (Member member : members) {
 					OnConnectionHandler.getInstance().updateMember(member, false);
 				}

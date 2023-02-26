@@ -175,9 +175,12 @@ public class OnConnectionHandler extends ListenerAdapter {
 				RoleHandler.getInstance().addRoleOnGuild(member.getGuild(), role);
 			}
 
+/*
 			List<Role> memberRoles = member.getRoles();
 			memberRoles.add(role);
 			guild.modifyMemberRoles(member, memberRoles).complete();
+*/
+			guild.addRoleToMember(member, role);
 			System.out.println("Add role : " + role + " to member " + member.getNickname());
 		}
 	}
