@@ -58,7 +58,10 @@ public class CongressusBot extends ListenerAdapter implements EventListener {
 
 		jdaBuilder.setBulkDeleteSplittingEnabled(false);
 
-		jdaBuilder.enableIntents(GatewayIntent.MESSAGE_CONTENT);
+		jdaBuilder.enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS, 
+			GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_VOICE_STATES, 
+			GatewayIntent.SCHEDULED_EVENTS, GatewayIntent.DIRECT_MESSAGES, 
+			GatewayIntent.GUILD_MESSAGE_REACTIONS);
 
 		jdaBuilder.build().awaitReady();
 	}
