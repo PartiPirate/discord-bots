@@ -140,8 +140,10 @@ public class SyncAgenda {
 
 	if (meeting.has("location")) {
 	    JSONObject location = meeting.getJSONObject("location");
-	    if (location.has("extra"))
+	    if (location.has("extra")) {
 		return StringEscapeUtils.unescapeHtml4(location.getString("extra").split("\\n")[0]).trim();
+	    }
+
 	    if (location.has("type")) return StringEscapeUtils.unescapeHtml4(location.getString("type")).trim();
 	}
 	return "Emplacement inconnu";
@@ -158,10 +160,13 @@ public class SyncAgenda {
 	if (meeting.has("location") && meeting.getJSONObject("location").has("discord")) {
 	    JSONObject discordLocation = meeting.getJSONObject("location").getJSONObject("discord");
 
-	    if (discordLocation.has("vocal"))
+	    if (discordLocation.has("vocal")) {
 		description += "\nVocal : " + discordLocation.getJSONObject("vocal").get("title");
-	    if (discordLocation.has("text"))
+	    }
+
+	    if (discordLocation.has("text")) {
 		description += "\nTexte : " + discordLocation.getJSONObject("text").get("title");
+	    }
 	}
 
 	description += "\n" + meeting.getString("url");
@@ -196,31 +201,34 @@ public class SyncAgenda {
 	if (event != null) {
 	    ScheduledEventManagerImpl eventManager = new ScheduledEventManagerImpl(event);
 	    boolean updated = false;
+
 	    if (!event.getName().equals(title)) {
 		eventManager.setName(title).complete();
 		updated = true;
 	    }
+
 	    if (!event.getDescription().equals(description)) {
 		eventManager.setDescription(description).complete();
 		updated = true;
 	    }
+
 	    if (channel != null) {
 		if (event.getChannel() != channel) {
 		    eventManager.setLocation(channel).complete();
 		    updated = true;
 		}
 	    }
-	    else {
-		if (!event.getLocation().equals(externalLocation)) {
-		    // when updating external events, we need to set up again start and end dates
-		    eventManager.setStartTime(start).setEndTime(end).setLocation(externalLocation).complete();
-		    updated = true;
-		}
+	    else if (!event.getLocation().equals(externalLocation)) {
+		// when updating external events, we need to set up again start and end dates
+		eventManager.setStartTime(start).setEndTime(end).setLocation(externalLocation).complete();
+		updated = true;
 	    }
+
 	    if (event.getStartTime().compareTo(start) != 0) {
 		eventManager.setStartTime(start).complete();
 		updated = true;
 	    }
+
 	    if (event.getEndTime().compareTo(end) != 0) {
 		eventManager.setEndTime(end).complete();
 		updated = true;
@@ -229,15 +237,18 @@ public class SyncAgenda {
 	    if (updated) {
 		System.out.println("Event updated : " + title);
 	    }
+
 	    return;
 	}
 
-	if (channel != null)
+	if (channel != null) {
 	    guild.createScheduledEvent(title, channel, start).setDescription(description).setEndTime(end).complete();
-	else
+	}
+	else {
 	    guild.createScheduledEvent(title, externalLocation, start, end).setDescription(description).complete();
-	System.out.println("Event created : " + title);
+	}
 
+	System.out.println("Event created : " + title);
     }
 
     protected static OffsetDateTime timestampToOffsetDateTime(Long ts) {
@@ -254,6 +265,7 @@ public class SyncAgenda {
 	    JSONObject meeting = congressusMeetings.getJSONObject(i);
 	    if (meeting.getLong("id") == id) return true;
 	}
+
 	return false;
     }
 
@@ -262,6 +274,7 @@ public class SyncAgenda {
 
 	String regex = "https://(.+)id=([0-9]+)(.*)";
 	Pattern p = Pattern.compile(regex);
+
 	for (String part : description.split("\\s")) {
 	    try {
 		Matcher m = p.matcher(part);
@@ -273,6 +286,7 @@ public class SyncAgenda {
 	    catch (Exception e) {
 	    }
 	}
+
 	return -1;
     }
 
@@ -289,6 +303,7 @@ public class SyncAgenda {
 	    String description = event.getDescription();
 	    if (description.contains(baseUrl)) {
 		long id = extractIdFromDescription(description);
+
 		if (id > 0) {
 		    if (!isCongressusEvent(congressusMeetings, id)) {
 			// System.out.println("Discord event '" + event.getName() + "' points to unknown
@@ -302,5 +317,4 @@ public class SyncAgenda {
 	    }
 	}
     }
-
 }

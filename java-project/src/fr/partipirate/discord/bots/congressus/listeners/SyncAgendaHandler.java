@@ -16,10 +16,12 @@ public class SyncAgendaHandler extends ListenerAdapter {
 
 	if (Configuration.getInstance().OPTIONS.get("syncAgenda") != null) {
 	    String delayString = Configuration.getInstance().OPTIONS.get("syncAgenda").get("delay");
+
 	    if (delayString != null) {
 		DELAY = Integer.parseInt(delayString);
 	    }
 	}
+
 	System.out.println("Scheduling SyncAgenda every " + (DELAY / 1000) + " seconds");
 
 	launchSchedulerThread();
@@ -48,6 +50,7 @@ public class SyncAgendaHandler extends ListenerAdapter {
 		}
 	    }
 	};
+
 	syncAgendaThread.start();
     }
 
@@ -55,8 +58,9 @@ public class SyncAgendaHandler extends ListenerAdapter {
 	if (congressusBot.getJDA() != null) {
 	    // needed to check if bot is initialized
 	    System.out.println("Syncing agenda");
-	    for (Guild guild : congressusBot.getJDA().getGuilds())
+	    for (Guild guild : congressusBot.getJDA().getGuilds()) {
 		SyncAgenda.syncAgenda(guild);
+	    }
 	}
     }
 }

@@ -21,6 +21,7 @@ public class SyncAgendaCommand extends ACongressusCommand implements ICommand {
     @Override
     public void doCommand(User user, MessageChannel channel, Guild guild, String[] commandParts) {
 	String message = SyncAgenda.syncAgenda(guild);
+
 	if (message != null) {
 	    channel.sendMessage(message).complete();
 	}
