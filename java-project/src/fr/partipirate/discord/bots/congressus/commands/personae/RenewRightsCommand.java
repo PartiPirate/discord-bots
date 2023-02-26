@@ -56,13 +56,14 @@ public class RenewRightsCommand implements ICommand {
 				if (members.size() == 0) {
 				    System.out.println("Try another way...");
 
+				    final String consumerSearch = search;
 				    guild.pruneMemberCache();
 				    
 				    guild.loadMembers().onSuccess(new Consumer<List<Member>>() {
 					@Override
 					public void accept(List<Member> members) {
 					    for(Member member : guild.getMembers()) {
-						if ((member.getEffectiveName() != null && member.getEffectiveName().toLowerCase().contains(search.toLowerCase())) || (member.getNickname() != null && member.getNickname().toLowerCase().contains(search.toLowerCase()))) {
+						if ((member.getEffectiveName() != null && member.getEffectiveName().toLowerCase().contains(consumerSearch.toLowerCase())) || (member.getNickname() != null && member.getNickname().toLowerCase().contains(consumerSearch.toLowerCase()))) {
 						    OnConnectionHandler.getInstance().updateMember(member, false);
 						}
 					    }
