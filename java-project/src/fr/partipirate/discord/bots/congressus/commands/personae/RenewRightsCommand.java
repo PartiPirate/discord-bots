@@ -52,6 +52,18 @@ public class RenewRightsCommand implements ICommand {
 
 				System.out.println("Found : " + members);
 
+				if (members.size() == 0) {
+				    System.out.println("Try another way...");
+
+				    for(Member member : guild.getMembers()) {
+					if (member.getEffectiveName().toLowerCase().contains(search.toLowerCase()) || member.getNickname().toLowerCase().contains(search.toLowerCase())) {
+					    members.add(member);
+					}
+				    }
+				}
+				
+				System.out.println("Found : " + members);
+
 				for (Member member : members) {
 					OnConnectionHandler.getInstance().updateMember(member, false);
 				}
