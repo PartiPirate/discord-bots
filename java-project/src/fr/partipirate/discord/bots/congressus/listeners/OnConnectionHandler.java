@@ -155,19 +155,28 @@ public class OnConnectionHandler extends ListenerAdapter {
 			Role role = null;
 			for(int index = 0; role == null && index < roles.size(); ++index) {
 				Role indexedRole = roles.get(index);
+				
+				System.out.println("Compare role : " + group + " to existing one : " + indexedRole.getName());
+
 				if (indexedRole.getName().equalsIgnoreCase(group)) {
 					role = indexedRole;
+					System.out.println("\tFound !");
 					break;
 				}
 			}
 
 			if (role == null) {
+				System.out.println("\tRole \"" + group + "\" not found into the list");
+
 				role = controller.createRole().complete();
 				role.getManager().setName(group).complete();
+
+				// Do it a second time if the RoleHandler doesn't catch the role create event
+				RoleHandler.getInstance().addRoleOnGuild(member.getGuild(), role);
 			}
 
 			controller.addSingleRoleToMember(member, role).complete();
-			System.out.println("Add role : " + role);
+			System.out.println("Add role : " + role + " to member " + member.getNickname());
 		}
 	}
 
@@ -195,6 +204,7 @@ public class OnConnectionHandler extends ListenerAdapter {
 			if (isNotDiscarded) continue;
 			
 			discardedRoles.add(role);
+			System.out.println("Remove role : " + role + " to member " + member.getNickname());
 		}
 
 		if (discardedRoles.size() > 0) {

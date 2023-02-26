@@ -46,8 +46,10 @@ public class RoleHandler extends ListenerAdapter {
 	@Override
 	public void onRoleCreate(RoleCreateEvent event) {
 		List<Role> roles = guildRoles.get(event.getGuild());
-		roles.add(event.getRole());
+//		roles.add(event.getRole());
 
+		addRoleOnGuild(event.getGuild(), event.getRole());
+		
 		dumpRoles(roles);
 	}
 	
@@ -58,7 +60,6 @@ public class RoleHandler extends ListenerAdapter {
 			Role role = iterator.next();
 			if (role.getId().equals(event.getRole().getId())) {
 				iterator.remove();
-				break;
 			}
 		}
 
@@ -72,11 +73,10 @@ public class RoleHandler extends ListenerAdapter {
 			Role role = iterator.next();
 			if (role.getId().equals(event.getRole().getId())) {
 				iterator.remove();
-				break;
 			}
 		}
 
-		roles.add(event.getRole());
+		addRoleOnGuild(event.getGuild(), event.getRole());
 		
 //		System.out.println("Now had " + roles.size() + " role");
 
@@ -86,6 +86,27 @@ public class RoleHandler extends ListenerAdapter {
 	private void dumpRoles(List<Role> roles) {
 		for (Role role : roles) {
 			System.out.println(role);
+		}
+	}
+	
+	public void addRoleOnGuild(Guild guild, Role role) {
+		List<Role> roles = guildRoles.get(guild);
+
+		if (roles == null) {
+		    roles = new ArrayList<Role>();
+		}
+
+		boolean toAddInList = true;
+
+		for (Role inrole : roles) {
+		    if (inrole.getId().equals(role.getId())) {
+			toAddInList = false;
+			break;
+		    }
+		}
+
+		if (toAddInList) {
+		    roles.add(role);
 		}
 	}
 }
