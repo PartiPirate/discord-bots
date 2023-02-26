@@ -9,11 +9,11 @@ import fr.partipirate.discord.bots.congressus.CongressusBot;
 import fr.partipirate.discord.bots.congressus.commands.ICommand;
 import fr.partipirate.discord.bots.congressus.commands.radio.MusicBrainzTrackInfo;
 import fr.partipirate.discord.bots.congressus.commands.radio.RadioHelper;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.PrivateChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
+import net.dv8tion.jda.api.entities.User;
 
 public class NowPlayingCommand extends ADJCommand implements ICommand {
 //    private static final String CD = "\uD83D\uDCBF";
@@ -109,7 +109,7 @@ public class NowPlayingCommand extends ADJCommand implements ICommand {
 //			eb.addField("", getTimestamp(timePosition) + " / " + getTimestamp(timeDuration), true);
 			eb.setFooter("\u23f1\ufe0f " + getTimestamp(timePosition) + " / " + getTimestamp(timeDuration), null);
 			
-			channel.sendMessage(eb.build()).complete();
+			channel.sendMessageEmbeds(eb.build()).complete();
 			
         }
 	}

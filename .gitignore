@@ -5,3 +5,5 @@ deploy.sh
 mp3
 pcm
 audio
+.vscode
+configuration_welcome.json

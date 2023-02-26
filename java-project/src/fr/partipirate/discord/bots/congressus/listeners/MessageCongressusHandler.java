@@ -20,19 +20,18 @@ import fr.partipirate.discord.bots.congressus.Configuration;
 import fr.partipirate.discord.bots.congressus.CongressusBot;
 import fr.partipirate.discord.bots.congressus.GuildMusicManager;
 import fr.partipirate.discord.bots.congressus.commands.congressus.CongressusHelper;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Category;
-import net.dv8tion.jda.core.entities.Channel;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.VoiceChannel;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import net.dv8tion.jda.core.managers.GuildController;
-import net.dv8tion.jda.core.managers.RoleManager;
-import net.dv8tion.jda.core.requests.restaction.ChannelAction;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.channel.concrete.Category;
+import net.dv8tion.jda.api.entities.channel.Channel;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.managers.RoleManager;
+import net.dv8tion.jda.api.requests.restaction.ChannelAction;
 
 public class MessageCongressusHandler extends ListenerAdapter {
 	private static long DELAY = 600000L; // 10mn, by default
@@ -187,7 +186,7 @@ public class MessageCongressusHandler extends ListenerAdapter {
 					try {
 						if (exceptIds.size() == 0 || !exceptIds.contains(member.getUser().getId())) {
 							System.out.println("Mute " + (member.getNickname() != null ? member.getNickname() : member.getUser().getName()));
-							guild.getController().setMute(member, true).complete();
+							guild.mute(member, true).complete();
 						}
 					}
 					catch(Exception e) {
@@ -212,7 +211,7 @@ public class MessageCongressusHandler extends ListenerAdapter {
 					if (member.getUser().getIdLong() == message.getLong("id")) {
 						System.out.println("Mute " + (member.getNickname() != null ? member.getNickname() : member.getUser().getName()));
 						try {
-							guild.getController().setMute(member, true).complete();
+							guild.mute(member, true).complete();
 						}
 						catch(Exception e) {
 							e.printStackTrace();
@@ -234,7 +233,7 @@ public class MessageCongressusHandler extends ListenerAdapter {
 					if (member.getUser().getIdLong() == message.getLong("id")) {
 						System.out.println("Unmute " + (member.getNickname() != null ? member.getNickname() : member.getUser().getName()));
 						try {
-							guild.getController().setMute(member, false).complete();
+							guild.mute(member, false).complete();
 						}
 						catch(Exception e) {
 							e.printStackTrace();
@@ -299,9 +298,8 @@ public class MessageCongressusHandler extends ListenerAdapter {
 		String label = message.getString("label");
 
 		Guild guild = congressusBot.getJDA().getGuilds().get(0);
-		GuildController controller = new GuildController(guild);
 
-		ChannelAction channel = controller.createTextChannel(label);
+		ChannelAction channel = guild.createTextChannel(label);
 
 		if (message.has("topic")) {
 			String topic = message.getString("topic");
@@ -332,9 +330,8 @@ public class MessageCongressusHandler extends ListenerAdapter {
 
 	private boolean createRole(JSONObject message) {
 		Guild guild = congressusBot.getJDA().getGuilds().get(0);
-		GuildController controller = new GuildController(guild);
 
-		Role role = controller.createRole().complete();
+		Role role = guild.createRole().complete();
 		RoleManager roleManager = role.getManager();
 
 		String label = message.getString("label");
@@ -442,16 +439,16 @@ public class MessageCongressusHandler extends ListenerAdapter {
 					denyPermissions.add(Permission.MANAGE_WEBHOOKS);
 					break;
 				case "ALLOW_MESSAGE_READ":
-					allowPermissions.add(Permission.MESSAGE_READ);
+					allowPermissions.add(Permission.VIEW_CHANNEL);
 					break;
 				case "DENY_MESSAGE_READ":
-					denyPermissions.add(Permission.MESSAGE_READ);
+					denyPermissions.add(Permission.VIEW_CHANNEL);
 					break;
 				case "ALLOW_MESSAGE_WRITE":
-					allowPermissions.add(Permission.MESSAGE_WRITE);
+					allowPermissions.add(Permission.MESSAGE_SEND);
 					break;
 				case "DENY_MESSAGE_WRITE":
-					denyPermissions.add(Permission.MESSAGE_WRITE);
+					denyPermissions.add(Permission.MESSAGE_SEND);
 					break;
 				case "ALLOW_MESSAGE_TTS":
 					allowPermissions.add(Permission.MESSAGE_TTS);
@@ -506,8 +503,8 @@ public class MessageCongressusHandler extends ListenerAdapter {
 					allowPermissions.add(Permission.MANAGE_CHANNEL);
 					allowPermissions.add(Permission.MANAGE_PERMISSIONS);
 					allowPermissions.add(Permission.MANAGE_WEBHOOKS);
-					allowPermissions.add(Permission.MESSAGE_READ);
-					allowPermissions.add(Permission.MESSAGE_WRITE);
+					allowPermissions.add(Permission.VIEW_CHANNEL);
+					allowPermissions.add(Permission.MESSAGE_SEND);
 					allowPermissions.add(Permission.MESSAGE_TTS);
 					allowPermissions.add(Permission.MESSAGE_MANAGE);
 					allowPermissions.add(Permission.MESSAGE_EMBED_LINKS);
@@ -522,8 +519,8 @@ public class MessageCongressusHandler extends ListenerAdapter {
 					denyPermissions.add(Permission.MANAGE_CHANNEL);
 					denyPermissions.add(Permission.MANAGE_PERMISSIONS);
 					denyPermissions.add(Permission.MANAGE_WEBHOOKS);
-					denyPermissions.add(Permission.MESSAGE_READ);
-					denyPermissions.add(Permission.MESSAGE_WRITE);
+					denyPermissions.add(Permission.VIEW_CHANNEL);
+					denyPermissions.add(Permission.MESSAGE_SEND);
 					denyPermissions.add(Permission.MESSAGE_TTS);
 					denyPermissions.add(Permission.MESSAGE_MANAGE);
 					denyPermissions.add(Permission.MESSAGE_EMBED_LINKS);
@@ -537,7 +534,7 @@ public class MessageCongressusHandler extends ListenerAdapter {
 		}
 
 //		role.getManager().setPermissions(rolePermissions).complete();
-		textChannel.createPermissionOverride(role).setAllow(allowPermissions).setDeny(denyPermissions).complete();
+		textChannel.upsertPermissionOverride(role).grant(allowPermissions).deny(denyPermissions).complete();
 	}
 	
 	public String getConnectionContent(URLConnection connection) throws IOException {

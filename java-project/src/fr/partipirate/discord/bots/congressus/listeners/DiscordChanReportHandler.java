@@ -12,45 +12,27 @@ import org.json.JSONObject;
 
 import fr.partipirate.discord.bots.congressus.Configuration;
 import fr.partipirate.discord.bots.congressus.commands.congressus.CongressusHelper;
-import net.dv8tion.jda.core.entities.Channel;
-import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.events.channel.text.TextChannelCreateEvent;
-import net.dv8tion.jda.core.events.channel.text.TextChannelDeleteEvent;
-import net.dv8tion.jda.core.events.channel.text.update.TextChannelUpdateNameEvent;
-import net.dv8tion.jda.core.events.channel.voice.VoiceChannelCreateEvent;
-import net.dv8tion.jda.core.events.channel.voice.VoiceChannelDeleteEvent;
-import net.dv8tion.jda.core.events.channel.voice.update.VoiceChannelUpdateNameEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.entities.channel.Channel;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.events.channel.ChannelCreateEvent;
+import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent;
+import net.dv8tion.jda.api.events.channel.update.ChannelUpdateNameEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class DiscordChanReportHandler extends ListenerAdapter {
 	@Override
-	public void onTextChannelCreate(TextChannelCreateEvent event) {
+	public void onChannelCreate(ChannelCreateEvent event) {
 		updateChannels(event.getGuild());
 	}
 	
 	@Override
-	public void onTextChannelUpdateName(TextChannelUpdateNameEvent event) {
+	public void onChannelUpdateName(ChannelUpdateNameEvent event) {
 		updateChannels(event.getGuild());
 	}
 	
 	@Override
-	public void onTextChannelDelete(TextChannelDeleteEvent event) {
-		updateChannels(event.getGuild());
-	}
-	
-	@Override
-	public void onVoiceChannelCreate(VoiceChannelCreateEvent event) {
-		updateChannels(event.getGuild());
-	}
-	
-	@Override
-	public void onVoiceChannelUpdateName(VoiceChannelUpdateNameEvent event) {
-		updateChannels(event.getGuild());
-	}
-	
-	@Override
-	public void onVoiceChannelDelete(VoiceChannelDeleteEvent event) {
+	public void onChannelDelete(ChannelDeleteEvent event) {
 		updateChannels(event.getGuild());
 	}
 
@@ -111,8 +93,8 @@ public class DiscordChanReportHandler extends ListenerAdapter {
             dos.write(postData);
             dos.flush();
             
-            int responseCode = httpClient.getResponseCode();
 /*
+            int responseCode = httpClient.getResponseCode();
             System.out.println("\nSending 'POST' request to URL : " + url);
             System.out.println("Post parameters : " + urlParameters);
             System.out.println("Response Code : " + responseCode);
