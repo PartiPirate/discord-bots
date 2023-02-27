@@ -211,7 +211,7 @@ public class OnConnectionHandler extends ListenerAdapter {
 			if (isNotDiscarded) continue;
 
 			guild.removeRoleFromMember(member, role).complete();
-			memberRoles.remove(role);
+//			memberRoles.remove(role);
 			rolesUpdated = true;
 			System.out.println("Remove role : " + role + " to member " + member.getNickname());
 		}
