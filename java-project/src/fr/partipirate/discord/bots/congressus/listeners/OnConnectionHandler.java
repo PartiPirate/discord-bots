@@ -188,6 +188,7 @@ public class OnConnectionHandler extends ListenerAdapter {
 	private void discardDiscordRoles(Member member, List<String> groups) {
 		List<Role> memberRoles = member.getRoles();
 		boolean rolesUpdated = false;
+		Guild guild = member.getGuild();
 
 		for (Role role : memberRoles) {
 			boolean isNotDiscarded = false;
@@ -208,16 +209,17 @@ public class OnConnectionHandler extends ListenerAdapter {
 			}
 
 			if (isNotDiscarded) continue;
-		
+
+			guild.removeRoleFromMember(member, role).complete();
 			memberRoles.remove(role);
 			rolesUpdated = true;
 			System.out.println("Remove role : " + role + " to member " + member.getNickname());
 		}
-
+/*
 		if (rolesUpdated) {
-			Guild guild = member.getGuild();
 			guild.modifyMemberRoles(member, memberRoles);
 		}
+*/		
 	}
 
 	private boolean isWarnedUser(User user) {
