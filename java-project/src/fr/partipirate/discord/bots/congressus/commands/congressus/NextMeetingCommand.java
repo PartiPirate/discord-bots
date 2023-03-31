@@ -132,10 +132,18 @@ public class NextMeetingCommand extends ACongressusCommand implements ICommand {
 				
 //				eb.setDescription("Text");
 				eb.addField("Horaire", StringEscapeUtils.unescapeHtml4(minMeeting.getString("meetingDatetime")), false);
-				eb.addField("Lieu", StringEscapeUtils.unescapeHtml4(minMeeting.getJSONObject("location").getString("type")), false);
-				if (minMeeting.getJSONObject("location").has("discord")) {
-					eb.addField(":hash:", StringEscapeUtils.unescapeHtml4(minMeeting.getJSONObject("location").getJSONObject("discord").getJSONObject("text").getString("title")), true);
-					eb.addField(":sound:", StringEscapeUtils.unescapeHtml4(minMeeting.getJSONObject("location").getJSONObject("discord").getJSONObject("vocal").getString("title")), true);
+				if (minMeeting.has("location")) {
+					if (minMeeting.getJSONObject("location").has("type")) {
+						eb.addField("Lieu", StringEscapeUtils.unescapeHtml4(minMeeting.getJSONObject("location").getString("type")), false);
+					}
+					if (minMeeting.getJSONObject("location").has("discord")) {
+						if (minMeeting.getJSONObject("location").getJSONObject("discord").has("text")) {
+							eb.addField(":hash:", StringEscapeUtils.unescapeHtml4(minMeeting.getJSONObject("location").getJSONObject("discord").getJSONObject("text").getString("title")), true);
+						}
+						if (minMeeting.getJSONObject("location").getJSONObject("discord").has("vocal")) {
+							eb.addField(":sound:", StringEscapeUtils.unescapeHtml4(minMeeting.getJSONObject("location").getJSONObject("discord").getJSONObject("vocal").getString("title")), true);
+						}
+					}
 				}
 				
 				channel.sendMessageEmbeds(eb.build()).complete();
