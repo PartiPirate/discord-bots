@@ -61,11 +61,13 @@ public class SyncAgenda {
 	    JSONArray congressusMeetings = object.getJSONArray("result");
 	    List<ScheduledEvent> discordEvents = guild.getScheduledEvents();
 
-	    createMissingEvents(congressusMeetings, discordEvents, guild);
+	    int errors = createMissingEvents(congressusMeetings, discordEvents, guild);
 
 	    deleteOldEvents(congressusMeetings, discordEvents, guild);
 
-	    return "La liste des événements a été mise à jour";
+		String msg = "La liste des événements a été mise à jour";
+	    if (errors > 0) msg += " avec " + errors + " erreurs";
+	    return msg;
 	}
 	catch (Exception e) {
 	    for (StackTraceElement el : e.getStackTrace())
@@ -90,13 +92,24 @@ public class SyncAgenda {
 	return null;
     }
 
-    protected static void createMissingEvents(JSONArray congressusMeetings, List<ScheduledEvent> discordEvents,
+    protected static int createMissingEvents(JSONArray congressusMeetings, List<ScheduledEvent> discordEvents,
 	    Guild guild) {
-	/* Create or update missing discord events */
+	/**
+	 *  Create or update missing discord events
+	 * 
+	 * @return number of errors during creation
+	 */
+	int errors = 0;
 	for (int i = 0; i < congressusMeetings.length(); ++i) {
 	    JSONObject meeting = congressusMeetings.getJSONObject(i);
+		try {
 	    createEvent(meeting, discordEvents, guild);
+		} catch (Exception e) {
+			System.err.println("Erreur pendant la création de l'événement " + meeting.getString("meetingTitle"));
+			errors++;
+		}
 	}
+	return errors;
     }
 
     protected static GuildChannel getDiscordChannel(JSONObject meeting, Guild guild) {
