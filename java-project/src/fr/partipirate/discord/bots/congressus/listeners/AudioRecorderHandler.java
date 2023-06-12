@@ -107,6 +107,16 @@ public class AudioRecorderHandler implements AudioReceiveHandler {
 		return this.recording;
 	}
 
+	private String getFullUser(User user) {
+		String username = user.getName();
+		// for compatibility with old accounts
+		String discriminator = user.getDiscriminator();
+		if (!discriminator.equals("0000")) {
+			username += "." + discriminator;
+		}
+		return username;
+	}
+
 	@Override
 	public void handleCombinedAudio(CombinedAudio combinedAudio) {
 		byte[] data = combinedAudio.getAudioData(1.0);
@@ -129,7 +139,7 @@ public class AudioRecorderHandler implements AudioReceiveHandler {
 			for (Member member : voicedChannel.getMembers()) {
 				User user = member.getUser();
 
-				String userFileName = getFilename(user.getName() + "." + user.getDiscriminator() + ".pcm");
+				String userFileName = getFilename(getFullUser(user) + ".pcm");
 				if (userFileName.equals(filename)) {
 					boolean isSpeaking = false;
 					for (User speakingUser : combinedAudio.getUsers()) {
@@ -169,7 +179,7 @@ public class AudioRecorderHandler implements AudioReceiveHandler {
 	}
 
 	private void addUserAudioData(User user, byte[] data) {
-		String userFileName = getFilename(user.getName() + "." + user.getDiscriminator() + ".pcm");
+		String userFileName = getFilename(getFullUser(user) + ".pcm");
 		try {
 			FileOutputStream userFis = userFileOutputStreams.get(userFileName);
 			if (userFis == null) {

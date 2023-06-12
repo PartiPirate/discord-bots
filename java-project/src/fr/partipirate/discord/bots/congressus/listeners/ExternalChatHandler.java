@@ -35,6 +35,16 @@ public class ExternalChatHandler extends ListenerAdapter {
 		}
 	}
 
+	private String getFullUser(User user) {
+		String username = user.getName();
+		// for compatibility with old accounts
+		String discriminator = user.getDiscriminator();
+		if (!discriminator.equals("0000")) {
+			username += "#" + discriminator;
+		}
+		return username;
+	}
+
 	private void handleMessage(User author, Channel textChannel, Message sourceMessage) {
 		String message = sourceMessage.getContentRaw();
 		
@@ -43,7 +53,7 @@ public class ExternalChatHandler extends ListenerAdapter {
 		}
 		
 		try {
-			String user = author.getName() + "#" + author.getDiscriminator();
+			String user = getFullUser(author);
 			user = URLEncoder.encode(user, java.nio.charset.StandardCharsets.UTF_8.toString());
 
 			String channel = URLEncoder.encode(textChannel.getName(), java.nio.charset.StandardCharsets.UTF_8.toString());

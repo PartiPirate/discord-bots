@@ -39,7 +39,13 @@ public class FirstMemberConnectionHandler extends ListenerAdapter {
 	}
 
 	private String getFullUser(User user) {
-		return user.getName() + "#" + user.getDiscriminator();
+		String username = user.getName();
+		// for compatibility with old accounts
+		String discriminator = user.getDiscriminator();
+		if (!discriminator.equals("0000")) {
+			username += "#" + discriminator;
+		}
+		return username;
 	}
 
 	private boolean isWarnedUser(User user) {
