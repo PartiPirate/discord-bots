@@ -66,7 +66,7 @@ public class OnConnectionHandler extends ListenerAdapter {
 
 		if (member.getOnlineStatus() == OnlineStatus.ONLINE && event.getOldOnlineStatus() == OnlineStatus.OFFLINE) {
 //			if (!member.getEffectiveName().equals("farlistener")) return; // test only
-			System.out.println("Test permissions on " + event.getUser().getName() + "#" + event.getUser().getDiscriminator());
+			System.out.println("Test permissions on " + getFullUser(event.getUser()));
 			updateMember(member);
 		}
 	}
@@ -85,7 +85,7 @@ public class OnConnectionHandler extends ListenerAdapter {
 		List<String> groups = new ArrayList<>();
 		
 		try {
-			String nickname = member.getUser().getName() + "#" + member.getUser().getDiscriminator();
+			String nickname = getFullUser(member.getUser());
 			nickname = URLEncoder.encode(nickname, java.nio.charset.StandardCharsets.UTF_8.toString());
 			
 			String getMemberUrl = PersonaeHelper.getUrl("do_getMember") + "&nickname=" + nickname;
@@ -231,7 +231,18 @@ public class OnConnectionHandler extends ListenerAdapter {
 	}
 
 	private String getFullUser(User user) {
-		return user.getName() + "#" + user.getDiscriminator();
+		/**
+		 * Get unique full user name
+		 * for migrated accounts, it's only the name
+		 * for old accounts, it's name with discriminator
+		 */
+		String username = user.getName();
+		// for compatibility with old accounts
+		String discriminator = user.getDiscriminator();
+		if (!discriminator.equals("0000")) {
+			username += "#" + discriminator;
+		}
+		return username;
 	}
 
 	private void warnUser(User user) {

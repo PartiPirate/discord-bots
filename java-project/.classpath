@@ -25,6 +25,6 @@
 	<classpathentry kind="lib" path="lib/commons-text-1.8.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang3-3.9.jar"/>
 	<classpathentry kind="lib" path="lib/spymemcached-2.8.4.jar"/>
-	<classpathentry kind="lib" path="lib/JDA-5.0.0-beta.6-withDependencies.jar"/>
+	<classpathentry kind="lib" path="lib/JDA-5.0.0-beta.10-withDependencies.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

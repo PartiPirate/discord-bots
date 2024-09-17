@@ -51,6 +51,13 @@ public class RenewRightsCommand implements ICommand {
 				members.addAll(guild.getMembersByName(search, true));
 				members.addAll(guild.getMembersByNickname(search, true));
 
+				// looking for accounts from ID
+				if (search.matches("<@\\d+>")) {
+				    search = search.substring(2, search.length()-1);
+				    System.out.println("Search for id "+search);
+				    members.add(guild.getMemberById(search));
+				}
+
 				System.out.println("Found : " + members);
 
 				if (members.size() == 0) {

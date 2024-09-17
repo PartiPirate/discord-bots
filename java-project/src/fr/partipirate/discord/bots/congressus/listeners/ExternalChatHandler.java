@@ -23,16 +23,26 @@ public class ExternalChatHandler extends ListenerAdapter {
 
 	@Override
 	public void onMessageUpdate(MessageUpdateEvent event) {
-		if (event.isFromType(ChannelType.TEXT)) {
+		if (event.isFromType(ChannelType.TEXT) || event.isFromType(ChannelType.VOICE)) {
 			handleMessage(event.getAuthor(), event.getChannel(), event.getMessage());
 		}
 	}
 
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event) {
-		if (event.isFromType(ChannelType.TEXT)) {
+		if (event.isFromType(ChannelType.TEXT) || event.isFromType(ChannelType.VOICE)) {
 			handleMessage(event.getAuthor(), event.getChannel(), event.getMessage());
 		}
+	}
+
+	private String getFullUser(User user) {
+		String username = user.getName();
+		// for compatibility with old accounts
+		String discriminator = user.getDiscriminator();
+		if (!discriminator.equals("0000")) {
+			username += "#" + discriminator;
+		}
+		return username;
 	}
 
 	private void handleMessage(User author, Channel textChannel, Message sourceMessage) {
@@ -43,7 +53,7 @@ public class ExternalChatHandler extends ListenerAdapter {
 		}
 		
 		try {
-			String user = author.getName() + "#" + author.getDiscriminator();
+			String user = getFullUser(author);
 			user = URLEncoder.encode(user, java.nio.charset.StandardCharsets.UTF_8.toString());
 
 			String channel = URLEncoder.encode(textChannel.getName(), java.nio.charset.StandardCharsets.UTF_8.toString());
